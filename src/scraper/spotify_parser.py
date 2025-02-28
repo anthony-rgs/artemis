@@ -1,16 +1,16 @@
 import re
 from src.utils.logger import logger 
-from src.config import SPOTIFY_PLAYLIST_TITLE_SELECTOR
+from src.config import SPOTIFY_PLAYLIST_TITLE_SELECTOR, SPOTIFY_ROW_COUNT_ATTR
 
 # Extracts the raw playlist name from the Spotify webpage
 def extract_playlist_name(driver):
-  logger.info("🚀 Extract playlist name started")
+  logger.info("🚀 Extracting playlist name...")
 
   try:
     playlist_name = driver.find_element("css selector", SPOTIFY_PLAYLIST_TITLE_SELECTOR).text
 
     if playlist_name:
-      logger.info(f"✅ Playlist name extracted: {playlist_name}\n")
+      logger.info(f"✅ Playlist name: {playlist_name}\n")
       return playlist_name
 
   except Exception:
@@ -19,7 +19,7 @@ def extract_playlist_name(driver):
 
 # Formats a playlist name by removing emojis and replacing spaces with hyphens
 def format_playlist_name(name):
-  logger.info("🚀 Format playlist name started")
+  logger.info("🚀 Formating playlist name...")
 
   emoji_pattern = re.compile(
     "["
@@ -40,6 +40,21 @@ def format_playlist_name(name):
   name_clean = emoji_pattern.sub(r'', name).strip()
   name_formatted = name_clean.replace(" ", "-").lower()
 
-  logger.info(f"✅ Playlist name formatted: {name_formatted}\n")
+  logger.info(f"✅ Formatted name: {name_formatted}\n")
 
   return name_formatted
+
+# Retrieve the total number of tracks in a Spotify playlist
+def count_playlist_tracks(driver):
+  logger.info("🚀 Retrieving number of musics...")
+
+  try:
+    row_count_element = driver.find_element("css selector", f"[{SPOTIFY_ROW_COUNT_ATTR}]")
+    row_count = int(row_count_element.get_attribute(SPOTIFY_ROW_COUNT_ATTR)) - 1
+
+    logger.info(f"✅ Tracks found: {row_count}\n")
+    return row_count
+
+  except Exception as e:
+    logger.error("❌ Failed to retrieve number of musics", exc_info=True)
+    return None

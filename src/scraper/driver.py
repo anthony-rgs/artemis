@@ -33,3 +33,8 @@ def init_driver():
   except Exception as e:
     logger.error(f"❌ Error during browser initialization: {e}")
     return None
+  
+# Close the connection with the driver
+def close_driver(driver):
+  driver.quit()
+  logger.info("💤 Closing the connection with the driver\n")

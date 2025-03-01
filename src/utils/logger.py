@@ -1,3 +1,4 @@
+import os
 import logging
 import sys
 from src.config import LOG_FILE, SAVE_LOG
@@ -18,6 +19,9 @@ logging.basicConfig(
   handlers=handlers,
 )
 
+# Clear terminal
+os.system('clear')
+
 # Create the global logger
 logger = logging.getLogger()
-logger.info("✅ Global logger initialized successfully\n")
+logger.info("✅ Global logger initialized\n")

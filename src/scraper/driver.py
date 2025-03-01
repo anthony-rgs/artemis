@@ -1,3 +1,4 @@
+import sys 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -27,7 +28,7 @@ def init_driver():
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.implicitly_wait(SELENIUM_TIMEOUT) # Waiting for driver
 
-    logger.info("✅ WebDriver successfully launched\n")
+    logger.info("✅ WebDriver launched\n")
     return driver
 
   except Exception as e:
@@ -38,3 +39,5 @@ def init_driver():
 def close_driver(driver):
   driver.quit()
   logger.info("💤 Closing the connection with the driver\n")
+  sys.exit(1) # Stop script
+

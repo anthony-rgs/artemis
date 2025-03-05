@@ -1,11 +1,10 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from src.utils.logger import logger 
+from selenium.webdriver.support.ui import WebDriverWait
 from src.config import SPOTIFY_TRACKLIST_ROW_SELECTOR, SPOTIFY_MUSIC_COLUMN_SELECTOR, SPOTIFY_ALBUM_COLUMN_SELECTOR
 
-# Extract all tracks in a page
-def extract_tracks(driver, tracks):
+# Extract all Spotify tracks in a page
+def spotify_extract_tracks(driver, tracks):
   # Waiting for elements
   WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, SPOTIFY_TRACKLIST_ROW_SELECTOR)))
 
@@ -44,7 +43,7 @@ def extract_tracks(driver, tracks):
         tracks.append(track_info)
         existing_tracks.add(track_info)  # Update the set
 
-    except Exception as e:
-      logger.error(f"📝 Error during track extraction : {e}")
+    except Exception:
+      pass
       
   return tracks

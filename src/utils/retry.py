@@ -6,7 +6,6 @@ from src.utils.logger import logger
 # Executes a function and allows retrying it in case of an error.
 def retry_function(func, *args, **kwargs):
   for attempt in range(1, MAX_RETRIES + 1):
-
     try:
       return func(*args, **kwargs)  # Execute the function with its arguments
 

@@ -1,1 +1,1 @@
-# This makes scraper a package
+# This makes deezer/ a package

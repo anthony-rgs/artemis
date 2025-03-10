@@ -4,7 +4,7 @@ from src.config import COLLECTIONS_FOLDER
 from src.utils.logger import logger
 
 # Create a JSON file with collection data
-def create_json(tracks, link, name):
+def create_json(tracks, link, name, platform, content_type):
   logger.info(f"🚀 Creating JSON file...")
 
   length = len(tracks)
@@ -28,7 +28,9 @@ def create_json(tracks, link, name):
     "musics": musics
   }
 
-  file_path = f"{COLLECTIONS_FOLDER}{name}_{timestamp}.json"
+  folder = f"{COLLECTIONS_FOLDER}/{platform}"
+
+  file_path = f"{folder}/{content_type}_{timestamp}_{name}.json"
 
   try:
     # Json file creation

@@ -49,7 +49,7 @@ def load_all_tracks(driver, total_tracks, container, extract_tracks):
 
     # Extract tracks safely
     try:
-      extract_tracks(driver, tracks)
+      extract_tracks(driver, tracks, total_tracks)
     except Exception as e:
       logger.error(f"❌ Error during track extraction: {e}", exc_info=True)
 

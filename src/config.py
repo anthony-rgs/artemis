@@ -33,8 +33,12 @@ MAX_SCROLL_ATTEMPTS = 10  # Limit for scrolling retries
 # Paths & File Handling
 # =======================
 
-COLLECTIONS_FOLDER = "collections/"  # Folder where collections JSON files are saved
-os.makedirs(COLLECTIONS_FOLDER, exist_ok=True)  # Create folder if it doesn't exist
+COLLECTIONS_FOLDER = "collections"  # Folder where collections JSON files are saved
+COLLECTIONS_SPOTIFY_FOLDER = os.path.join(COLLECTIONS_FOLDER, "spotify")
+COLLECTIONS_DEEZER_FOLDER = os.path.join(COLLECTIONS_FOLDER, "deezer")
+# Create folders if they doesn't exist
+for folder in [COLLECTIONS_FOLDER, COLLECTIONS_SPOTIFY_FOLDER, COLLECTIONS_DEEZER_FOLDER]:
+  os.makedirs(folder, exist_ok=True)
 
 
 # =======================

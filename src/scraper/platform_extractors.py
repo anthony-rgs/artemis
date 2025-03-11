@@ -4,6 +4,7 @@ from src.scraper.spotify.spotify_tracks_extractor import spotify_extract_album_t
 from src.scraper.spotify.spotify_scroll_container import get_spotify_scroll_container
 # Deezer
 from src.scraper.deezer.deezer_parser import deezer_extract_name, deezer_count_tracks
+from src.scraper.deezer.deezer_scroll_container import get_deezer_scroll_container
 
 
 PLATFORM_FUNCTIONS = {
@@ -19,7 +20,7 @@ PLATFORM_FUNCTIONS = {
   "deezer": {
     "count_tracks": deezer_count_tracks,
     "extract_name": deezer_extract_name,
-    "get_scroll_container": "",
+    "get_scroll_container": get_deezer_scroll_container,
     "extract_tracks": {
       "album": "",
       "playlist": ""

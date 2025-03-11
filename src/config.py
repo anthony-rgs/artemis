@@ -62,6 +62,8 @@ SPOTIFY_SCROLL_CONTAINER = '[data-overlayscrollbars-viewport]'  # Container for 
 DEEZER_INFORMATIONS_SELECTOR = '[data-testid="masthead"]'  # Selector for header information
 DEEZER_TITLE_SELECTOR = 'h2'  # <h2> -> title
 DEEZER_TOTAL_TRACKS_XPATH = '(//ul)[2]//li'  # Second <ul> and first <li>
+DEEZER_SCROLL_CONTAINER = 'body'  # Container for scrolling
+
 
 # =======================
 # Error Handling & Retries

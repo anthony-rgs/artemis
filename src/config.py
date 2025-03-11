@@ -58,6 +58,10 @@ SPOTIFY_MUSIC_COLUMN_SELECTOR  = 'div[aria-colindex="2"]'  # Music data column
 SPOTIFY_ALBUM_COLUMN_SELECTOR  = 'div[aria-colindex="3"]'  # Album data column
 SPOTIFY_SCROLL_CONTAINER = '[data-overlayscrollbars-viewport]'  # Container for scrolling
 
+# Deezer
+DEEZER_INFORMATIONS_SELECTOR = '[data-testid="masthead"]'  # Selector for header information
+DEEZER_TITLE_SELECTOR = 'h2'  # <h2> -> title
+DEEZER_TOTAL_TRACKS_XPATH = '(//ul)[2]//li'  # Second <ul> and first <li>
 
 # =======================
 # Error Handling & Retries

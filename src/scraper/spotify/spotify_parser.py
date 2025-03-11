@@ -1,14 +1,21 @@
-from src.config import SPOTIFY_TITLE_SELECTOR, SPOTIFY_ROW_COUNT_ATTR
+from selenium.webdriver.common.by import By
+from src.config import SPOTIFY_TITLE_SELECTOR, SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH, SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR
 from src.utils.logger import logger 
 from src.scraper.driver import close_driver
 
 # Retrieve the total number of tracks in a Spotify page
-def spotify_count_tracks(driver):
+def spotify_count_tracks(driver, content_type):
   logger.info("🚀 Retrieving number of musics...")
 
-  try:
-    row_count_element = driver.find_element("css selector", f"[{SPOTIFY_ROW_COUNT_ATTR}]")
-    row_count = int(row_count_element.get_attribute(SPOTIFY_ROW_COUNT_ATTR)) - 1
+  try: 
+    if content_type == "album":
+      # Find_element -> take the first element
+      row_count_element = driver.find_element(By.XPATH, SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH).text
+      row_count = int(row_count_element.split()[0])
+    
+    elif content_type == "playlist":
+      row_count_element = driver.find_element("css selector", f"[{SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR}]")
+      row_count = int(row_count_element.get_attribute(SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR)) - 1
 
     if row_count:
       logger.info(f"✅ Spotify tracks found: {row_count}\n")

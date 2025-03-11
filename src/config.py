@@ -21,12 +21,11 @@ SELENIUM_OPTIONS = {
   "disable_gpu": True,  # Disable GPU acceleration (fixes issues in headless mode)
   "no_sandbox": True,  # Required for running in some environments (e.g., Linux servers)
   "disable_dev_shm_usage": True,  # To prevent memory issues on Docker/Linux.
-  "window_size": "1920,1080",  # Set window size for consistent rendering
+  "window_size": "2560,1440",  # Set window size for consistent rendering
   "implicit_wait": 5,  # Implicit wait for elements
 }
 
 SELENIUM_TIMEOUT = 10  # Explicit wait timeout (seconds)
-MAX_SCROLL_ATTEMPTS = 10  # Limit for scrolling retries
 
 
 # =======================
@@ -51,10 +50,12 @@ SCROLL_STEP = 500
 SPOTIFY_BASE_URL = "https://open.spotify.com/"
 SPOTIFY_BILLION_CLUB_URL = "https://open.spotify.com/playlist/37i9dQZF1DX7iB3RCnBnN4"
 SPOTIFY_TITLE_SELECTOR = '[data-testid="entityTitle"]'  # Selector for title
+SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH = "//main/section/div[1]/div[2]/div[2]/div[1]/div[2]/span"  # ALBUM -> Xpath from main to total tacks span
+SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR = "aria-rowcount"  # PLAYLIST -> Attribute to fetch the total number of tracks
+SPOTIFY_PLAY_COUNT_SELECTOR = '[data-testid="playcount"]'  # Selector for play count
 SPOTIFY_TRACKLIST_ROW_SELECTOR = '[data-testid="tracklist-row"]'  # Selector for tracklist row
-SPOTIFY_MUSIC_COLUMN_SELECTOR  = 'div[aria-colindex="2"]'
-SPOTIFY_ALBUM_COLUMN_SELECTOR  = 'div[aria-colindex="3"]'
-SPOTIFY_ROW_COUNT_ATTR = "aria-rowcount"  # Attribute to fetch the total number of tracks
+SPOTIFY_MUSIC_COLUMN_SELECTOR  = 'div[aria-colindex="2"]'  # Music data column
+SPOTIFY_ALBUM_COLUMN_SELECTOR  = 'div[aria-colindex="3"]'  # Album data column
 SPOTIFY_SCROLL_CONTAINER = '[data-overlayscrollbars-viewport]'  # Container for scrolling
 
 

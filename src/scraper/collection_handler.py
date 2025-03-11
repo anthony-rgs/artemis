@@ -32,18 +32,18 @@ def scrape_collection(tracks_url, json_save = True ):
     count_tracks = PLATFORM_FUNCTIONS[platform]["count_tracks"]
     extract_name = PLATFORM_FUNCTIONS[platform]["extract_name"]
     get_scroll_container = PLATFORM_FUNCTIONS[platform]["get_scroll_container"]
-    extract_tracks = PLATFORM_FUNCTIONS[platform]["extract_tracks"]
+    extract_tracks = PLATFORM_FUNCTIONS[platform]["extract_tracks"][content_type]
 
-    total_tracks = retry_function(count_tracks, driver)
+    total_tracks = retry_function(count_tracks, driver, content_type)
 
     scroll_container = get_scroll_container(driver)
     
     # Fetch tracks and start scroll timer
     start_scrolling = time.perf_counter()
-    tracks = retry_function(retry_and_check_tracks, driver, total_tracks, scroll_container, extract_tracks)
+    tracks = retry_function(retry_and_check_tracks, driver, total_tracks, scroll_container, extract_tracks) # Get tracks
     end_scrolling = time.perf_counter()
     scrolling_elapsed = end_scrolling - start_scrolling
-    logger.info(f'⏰ Scrolling completed in {scrolling_elapsed:.6f} seconds\n')
+    logger.info(f'⏰ Scrolling completed in {scrolling_elapsed:.2f} seconds\n')
 
     if not tracks:
       logger.error(f"💀 Tracks scraping failed after multiple retries... \n")
@@ -62,7 +62,7 @@ def scrape_collection(tracks_url, json_save = True ):
       # End global timer
       end_scraping = time.perf_counter()
       scraping_elapsed = end_scraping - start_scraping
-      logger.info(f'⏰ Scraping completed in {scraping_elapsed:.6f} seconds\n')
+      logger.info(f'⏰ Scraping completed in {scraping_elapsed:.2f} seconds\n')
 
       logger.info(f"🎉 You rock, Artémis !\n")
 

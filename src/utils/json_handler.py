@@ -15,13 +15,14 @@ def create_json(tracks, link, name, platform, content_type):
       "music_name": music_name, 
       "artists": artists, 
       "album": album, 
-      "music_link": music_link,
       "album_link": album_link, 
+      "music_link": music_link,
     } 
     for album, album_link, artists, music_name, music_link in tracks
   ]
 
   data = {
+    "type": content_type,
     "name": name,
     "length": length,
     "link": link,

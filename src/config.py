@@ -9,7 +9,7 @@ LOG_FOLDER = "logs/"  # Folder where log files are saved
 os.makedirs(LOG_FOLDER, exist_ok=True)  # Create folder if it doesn't exist
 
 LOG_FILE = os.path.join(LOG_FOLDER, f"artemis_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log") # Log file name
-SAVE_LOG = False  # Enables/disables logging to a file
+SAVE_LOG = True  # Enables/disables logging to a file
 
 
 # =======================
@@ -44,7 +44,8 @@ for folder in [COLLECTIONS_FOLDER, COLLECTIONS_SPOTIFY_FOLDER, COLLECTIONS_DEEZE
 # Scraping Configuration
 # =======================
 
-SCROLL_STEP = 500
+SCROLL_ITERATIONS = 20  # 1 scroll iteration corresponds to one visible line on the page (Don't set it too high, take it slow with Deezer)
+CUSTOM_OVERLAY_ID="artemis-custom-overlay"
 
 # Spotify
 SPOTIFY_BASE_URL = "https://open.spotify.com/"
@@ -56,13 +57,19 @@ SPOTIFY_PLAY_COUNT_SELECTOR = '[data-testid="playcount"]'  # Selector for play c
 SPOTIFY_TRACKLIST_ROW_SELECTOR = '[data-testid="tracklist-row"]'  # Selector for tracklist row
 SPOTIFY_MUSIC_COLUMN_SELECTOR  = 'div[aria-colindex="2"]'  # Music data column
 SPOTIFY_ALBUM_COLUMN_SELECTOR  = 'div[aria-colindex="3"]'  # Album data column
-SPOTIFY_SCROLL_CONTAINER = '[data-overlayscrollbars-viewport]'  # Container for scrolling
+SPOTIFY_SCROLL_CONTAINER = '[data-overlayscrollbars-viewport]'  # Scrolling container
 
 # Deezer
 DEEZER_INFORMATIONS_SELECTOR = '[data-testid="masthead"]'  # Selector for header information
 DEEZER_TITLE_SELECTOR = 'h2'  # <h2> -> title
 DEEZER_TOTAL_TRACKS_XPATH = '(//ul)[2]//li'  # Second <ul> and first <li>
-DEEZER_SCROLL_CONTAINER = 'body'  # Container for scrolling
+DEEZER_TRACKLIST_ROW_SELECTOR = 'div[draggable][aria-rowindex]'  # Selector for the div row with "draggable" and "aria-rowindex" -> Tracklist row
+DEEZER_TRACKLIST_ROW_ARTIST_SELECTOR = '[data-testid="artist"]'  # Selector for artist name in a tracklist row
+DEEZER_TRACKLIST_ROW_MUSIC_SELECTOR = '[data-testid="title"]'  # Selector for the track name in a tracklist row
+DEEZER_ALBUM_ARTIST_NAME_SELECTOR = '[data-testid="creator-name"]'  # Selector for the artist's name of the album 
+DEEZER_PLAYLIST_ALBUM_SELECTOR = '[data-testid="album"]'  # Selector for the artist's name of the album -> for the album page
+DEEZER_SCROLL_CONTAINER = 'body'  # Scrolling container
+DEEZER_CLOSE_COOKIE_ID = "gdpr-btn-refuse-all"  # Id of the cookie button
 
 
 # =======================

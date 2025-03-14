@@ -5,7 +5,7 @@ from src.scraper.driver import close_driver
 
 # Retrieve the total number of tracks in a Deezer page
 def deezer_count_tracks(driver, _):
-  logger.info("🚀 Retrieving number of musics...")
+  logger.info("🚀 Retrieving number of tracks...")
 
   try: 
     container_element = driver.find_element(By.CSS_SELECTOR, DEEZER_INFORMATIONS_SELECTOR)
@@ -18,7 +18,7 @@ def deezer_count_tracks(driver, _):
     
 
   except Exception:
-    logger.error(f"❌ Failed to retrieve number of Deezer musics. Is there any music available ?", exc_info=True)
+    logger.error(f"❌ Failed to retrieve number of Deezer tracks. Is there any track available ?", exc_info=True)
     close_driver(driver)
 
 

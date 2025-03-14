@@ -10,7 +10,7 @@ from src.scraper.insert_custom_div import insert_custom_div
 from src.scraper.platform_extractors import PLATFORM_FUNCTIONS
 
 # Scrapes a collection from the given platform
-def scrape_collection(tracks_url, json_save = True ):
+def scrape_collection(tracks_url, json_save = True, kill_script = True ):
   # Start script timer
   start_scraping = time.perf_counter()
 
@@ -63,7 +63,7 @@ def scrape_collection(tracks_url, json_save = True ):
 
         name = retry_function(extract_name, driver)
         formatted_name = retry_function(format_name, name)
-        create_json(tracks, tracks_url, formatted_name, platform, content_type)
+        json = create_json(tracks, tracks_url, formatted_name, platform, content_type)
 
       # End global timer
       end_scraping = time.perf_counter()
@@ -72,9 +72,10 @@ def scrape_collection(tracks_url, json_save = True ):
 
       logger.info(f"🎉 You rock, Artémis !\n")
 
-      close_driver(driver)
+      # Close driver
+      close_driver(driver, kill_script)
 
-      return tracks
+      return tracks, json
     
     else:
       logger.error(f"💀 Tracks scraping failed after multiple retries... \n")

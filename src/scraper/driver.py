@@ -36,8 +36,10 @@ def init_driver():
     return None
   
 # Close the connection with the driver
-def close_driver(driver):
+def close_driver(driver, kill_script):
   driver.quit()
   logger.info("💤 Closing the connection with the driver\n")
-  sys.exit(1) # Stop script
+  
+  if kill_script:
+    sys.exit(1) # Stop script
 

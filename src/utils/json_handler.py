@@ -10,15 +10,15 @@ def create_json(tracks, link, name, platform, content_type):
   length = len(tracks)
   timestamp = int(time.time())
 
-  musics = [
+  tracks = [
     {
-      "music_name": music_name, 
+      "track_name": track_name, 
       "artists": artists, 
       "album": album, 
       "album_link": album_link, 
-      "music_link": music_link,
+      "track_link": track_link,
     } 
-    for album, album_link, artists, music_name, music_link in tracks
+    for album, album_link, artists, track_name, track_link in tracks
   ]
 
   data = {
@@ -26,7 +26,7 @@ def create_json(tracks, link, name, platform, content_type):
     "name": name,
     "length": length,
     "link": link,
-    "musics": musics
+    "tracks": tracks
   }
 
   folder = f"{COLLECTIONS_FOLDER}/{platform}"
@@ -39,6 +39,7 @@ def create_json(tracks, link, name, platform, content_type):
       json.dump(data, file, indent=2, ensure_ascii=False)
       
     logger.info(f"✅ JSON file created: {file_path}\n")
+    return file_path
 
   except Exception as e:
     logger.error(f"❌ Error creating JSON file: {e}", exc_info=True)

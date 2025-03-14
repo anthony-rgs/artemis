@@ -9,7 +9,7 @@ LOG_FOLDER = "logs/"  # Folder where log files are saved
 os.makedirs(LOG_FOLDER, exist_ok=True)  # Create folder if it doesn't exist
 
 LOG_FILE = os.path.join(LOG_FOLDER, f"artemis_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log") # Log file name
-SAVE_LOG = True  # Enables/disables logging to a file
+SAVE_LOG = False  # Enables/disables logging to a file
 
 
 # =======================
@@ -33,10 +33,11 @@ SELENIUM_TIMEOUT = 10  # Explicit wait timeout (seconds)
 # =======================
 
 COLLECTIONS_FOLDER = "collections"  # Folder where collections JSON files are saved
-COLLECTIONS_SPOTIFY_FOLDER = os.path.join(COLLECTIONS_FOLDER, "spotify")
 COLLECTIONS_DEEZER_FOLDER = os.path.join(COLLECTIONS_FOLDER, "deezer")
+COLLECTIONS_SPOTIFY_FOLDER = os.path.join(COLLECTIONS_FOLDER, "spotify")
+COLLECTIONS_SPOTIFY_BILLION_CLUB_FOLDER = os.path.join(COLLECTIONS_FOLDER, "billion-club")
 # Create folders if they doesn't exist
-for folder in [COLLECTIONS_FOLDER, COLLECTIONS_SPOTIFY_FOLDER, COLLECTIONS_DEEZER_FOLDER]:
+for folder in [COLLECTIONS_FOLDER, COLLECTIONS_SPOTIFY_FOLDER, COLLECTIONS_DEEZER_FOLDER, COLLECTIONS_SPOTIFY_BILLION_CLUB_FOLDER]:
   os.makedirs(folder, exist_ok=True)
 
 
@@ -55,7 +56,7 @@ SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH = "//main/section/div[1]/div[2]/div[2]/div[1]/d
 SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR = "aria-rowcount"  # PLAYLIST -> Attribute to fetch the total number of tracks
 SPOTIFY_PLAY_COUNT_SELECTOR = '[data-testid="playcount"]'  # Selector for play count
 SPOTIFY_TRACKLIST_ROW_SELECTOR = '[data-testid="tracklist-row"]'  # Selector for tracklist row
-SPOTIFY_MUSIC_COLUMN_SELECTOR  = 'div[aria-colindex="2"]'  # Music data column
+SPOTIFY_TRACK_COLUMN_SELECTOR  = 'div[aria-colindex="2"]'  # Track data column
 SPOTIFY_ALBUM_COLUMN_SELECTOR  = 'div[aria-colindex="3"]'  # Album data column
 SPOTIFY_SCROLL_CONTAINER = '[data-overlayscrollbars-viewport]'  # Scrolling container
 
@@ -65,7 +66,7 @@ DEEZER_TITLE_SELECTOR = 'h2'  # <h2> -> title
 DEEZER_TOTAL_TRACKS_XPATH = '(//ul)[2]//li'  # Second <ul> and first <li>
 DEEZER_TRACKLIST_ROW_SELECTOR = 'div[draggable][aria-rowindex]'  # Selector for the div row with "draggable" and "aria-rowindex" -> Tracklist row
 DEEZER_TRACKLIST_ROW_ARTIST_SELECTOR = '[data-testid="artist"]'  # Selector for artist name in a tracklist row
-DEEZER_TRACKLIST_ROW_MUSIC_SELECTOR = '[data-testid="title"]'  # Selector for the track name in a tracklist row
+DEEZER_TRACKLIST_ROW_TRACK_SELECTOR = '[data-testid="title"]'  # Selector for the track name in a tracklist row
 DEEZER_ALBUM_ARTIST_NAME_SELECTOR = '[data-testid="creator-name"]'  # Selector for the artist's name of the album 
 DEEZER_PLAYLIST_ALBUM_SELECTOR = '[data-testid="album"]'  # Selector for the artist's name of the album -> for the album page
 DEEZER_SCROLL_CONTAINER = 'body'  # Scrolling container

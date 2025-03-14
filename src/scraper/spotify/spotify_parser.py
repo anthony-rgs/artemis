@@ -5,7 +5,7 @@ from src.scraper.driver import close_driver
 
 # Retrieve the total number of tracks in a Spotify page
 def spotify_count_tracks(driver, content_type):
-  logger.info("🚀 Retrieving number of musics...")
+  logger.info("🚀 Retrieving number of tracks...")
 
   try: 
     if content_type == "album":
@@ -22,7 +22,7 @@ def spotify_count_tracks(driver, content_type):
       return row_count
 
   except Exception:
-    logger.error(f"❌ Failed to retrieve number of Spotify musics. Is there any music available ?", exc_info=True)
+    logger.error(f"❌ Failed to retrieve number of Spotify tracks. Is there any track available ?", exc_info=True)
     close_driver(driver)
 
 

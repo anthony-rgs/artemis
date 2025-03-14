@@ -29,7 +29,7 @@ def spotify_extract_album_tracks(driver, tracks, total_tracks):
   page_tracks, existing_tracks = get_clean_page_tracks(driver, tracks, total_tracks)
   
   # The albums contain few tracks, so it's not an issue to load their data here, within the scroll loop
-  album_name = driver.find_element("css selector", SPOTIFY_TITLE_SELECTOR).text
+  album_name = driver.find_element(By.CSS_SELECTOR, SPOTIFY_TITLE_SELECTOR).text
   album_link = driver.current_url
   
   for page_track in page_tracks:

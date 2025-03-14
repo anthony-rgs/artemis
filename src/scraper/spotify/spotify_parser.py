@@ -14,7 +14,7 @@ def spotify_count_tracks(driver, content_type):
       row_count = int(row_count_element.split()[0])
     
     elif content_type == "playlist":
-      row_count_element = driver.find_element("css selector", f"[{SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR}]")
+      row_count_element = driver.find_element(By.CSS_SELECTOR, f"[{SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR}]")
       row_count = int(row_count_element.get_attribute(SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR)) - 1
 
     if row_count:
@@ -31,7 +31,7 @@ def spotify_extract_name(driver):
   logger.info("🚀 Extracting Spotify name...")
 
   try:
-    name = driver.find_element("css selector", SPOTIFY_TITLE_SELECTOR).text
+    name = driver.find_element(By.CSS_SELECTOR, SPOTIFY_TITLE_SELECTOR).text
 
     if name:
       logger.info(f"✅ Spotify name: {name}\n")

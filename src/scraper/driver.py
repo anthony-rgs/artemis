@@ -1,9 +1,13 @@
 import sys 
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+
 from src.config import SELENIUM_OPTIONS, SELENIUM_TIMEOUT 
+
 from src.utils.logger import logger 
+
 
 # Initializes and returns a Selenium WebDriver instance with the options defined in config.py
 def init_driver():
@@ -36,7 +40,7 @@ def init_driver():
     return None
   
 # Close the connection with the driver
-def close_driver(driver, kill_script):
+def close_driver(driver, kill_script = True):
   driver.quit()
   logger.info("💤 Closing the connection with the driver\n")
   

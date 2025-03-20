@@ -1,13 +1,16 @@
 import time
+
 from src.utils.retry import retry_function
 from src.utils.logger import logger 
 from src.utils.url_handler import check_link
-from src.utils.json_handler import create_json 
+from src.utils.json_handler import create_json_file 
 from src.utils.string_utils import format_name
+
 from src.scraper.driver import init_driver, close_driver
 from src.scraper.scroll_manager import retry_and_check_tracks
 from src.scraper.insert_custom_div import insert_custom_div
 from src.scraper.platform_extractors import PLATFORM_FUNCTIONS
+
 
 # Scrapes a collection from the given platform
 def scrape_collection(tracks_url, json_save = True, kill_script = True ):
@@ -63,7 +66,7 @@ def scrape_collection(tracks_url, json_save = True, kill_script = True ):
 
         name = retry_function(extract_name, driver)
         formatted_name = retry_function(format_name, name)
-        json = create_json(tracks, tracks_url, formatted_name, platform, content_type)
+        collection_json = create_json_file(tracks, tracks_url, formatted_name, platform, content_type)
 
       # End global timer
       end_scraping = time.perf_counter()
@@ -75,9 +78,11 @@ def scrape_collection(tracks_url, json_save = True, kill_script = True ):
       # Close driver
       close_driver(driver, kill_script)
 
-      return tracks, json
+      return tracks, collection_json
     
     else:
       logger.error(f"💀 Tracks scraping failed after multiple retries... \n")
       close_driver(driver)
-      return None
+      return None, None
+    
+  return None, None

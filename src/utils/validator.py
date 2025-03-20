@@ -6,7 +6,7 @@ def check_scraped_data(tracks, count_tracks):
   total_tracks = len(tracks)
   
   if total_tracks == count_tracks:
-    logger.info(f"✅ Total tracks extracted: {total_tracks}\n")
+    logger.info(f"✅ Total tracks : {total_tracks}\n")
     return True
 
   if total_tracks > count_tracks:

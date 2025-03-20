@@ -8,9 +8,13 @@ def check_link(url):
   # Check if the URL is reachable (status code 200)
   try:
     response = requests.get(url)
-    if response.status_code != 200:
+    # To many request can block, so we have to allow 200 and 429
+    if response.status_code != 200 and response.status_code != 429:
       logger.error("❌ The site did not respond with a 200 status code\n")
       return False 
+    
+    if response.status_code == 429:
+      logger.info("😬 The site respond with a 429 status code. Too many requests oups..\n")
   
   except requests.exceptions.RequestException:
     logger.error("❌ Error checking the link, please ensure the link is correct\n")

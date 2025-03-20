@@ -53,6 +53,7 @@ SPOTIFY_BASE_URL = "https://open.spotify.com/"
 SPOTIFY_BILLION_CLUB_URL = "https://open.spotify.com/playlist/37i9dQZF1DX7iB3RCnBnN4"
 SPOTIFY_TITLE_SELECTOR = '[data-testid="entityTitle"]'  # Selector for title
 SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH = "//main/section/div[1]/div[2]/div[2]/div[1]/div[2]/span"  # ALBUM -> Xpath from main to total tacks span
+SPOTIFY_TRACK_IMAGE_XPATH = "//main/section/div[1]//img[1]"  # Track page -> Xpath from main to track image
 SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR = "aria-rowcount"  # PLAYLIST -> Attribute to fetch the total number of tracks
 SPOTIFY_PLAY_COUNT_SELECTOR = '[data-testid="playcount"]'  # Selector for play count
 SPOTIFY_TRACKLIST_ROW_SELECTOR = '[data-testid="tracklist-row"]'  # Selector for tracklist row

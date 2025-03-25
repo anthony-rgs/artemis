@@ -1,6 +1,18 @@
 import os
 from datetime import datetime
 
+
+# =======================
+# Collection URLS
+# =======================
+URL_DEEZER_PLAYLIST = "https://www.deezer.com/en/playlist/10071848282"
+URL_DEEZER_ALBUM = "https://www.deezer.com/en/album/635038521"
+URL_DEEZER_ALBUM_DISCS = "https://www.deezer.com/en/album/68848411"
+URL_SPOTIFY_PLAYLIST = "https://open.spotify.com/playlist/2mJrr2tj7uv4POUZsSiOto"
+URL_SPOTIFY_ALBUM = "https://open.spotify.com/album/5pLlGJrxuQO3jMoQe1XxZY"
+URL_SPOTIFY_ALBUM_DISCS = "https://open.spotify.com/album/6idVoBWP2mt1qoMtASm3gc"
+
+
 # =======================
 # Logging Configuration
 # =======================

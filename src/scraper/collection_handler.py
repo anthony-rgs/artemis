@@ -60,6 +60,8 @@ def scrape_collection(tracks_url, json_save = True, kill_script = True ):
     logger.info(f'⏰ Scrolling completed in {scrolling_elapsed:.2f} seconds\n')
 
     if tracks:
+      collection_json = ""
+      
       # Save in Json
       if json_save:
         logger.info("💾 Saving data in JSON file...\n")  

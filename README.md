@@ -29,7 +29,7 @@ Artemis retrieves information from any **playlist or album** on these platforms.
       "album_link": "https://music.apple.com/fr/album/favourite-worst-nightmare/251126923",
       "track_link": "https://music.apple.com/fr/song/teddy-picker/251126938"
     },
-    ...
+    "..."
   ]
 }
 ```
@@ -75,8 +75,6 @@ To execute the script in module mode, use the following command:
 python3 -m folder.file_name
 ```
 
----
-
 <br>
 
 ## 5. Available Scripts
@@ -119,7 +117,7 @@ The generated JSON file looks like this:
       "album_embed": "https://open.spotify.com/embed/album/6rsQnwaoJHxXJRCDBPkBRw?theme=0",
       "album_iframe": "<iframe style='border-radius:12px' src='https://open.spotify.com/embed/track/58ge6dfP91o9oXMzq3XkIS?theme=0' width='100%' height='152' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe>"
     },
-    ...
+    "..."
   ]
 }
 ```

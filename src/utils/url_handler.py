@@ -1,5 +1,7 @@
 import requests
+
 from src.utils.logger import logger 
+
 
 # Check if the collection URL is valid and identifies the platform and type (album/playlist)
 def check_link(url):
@@ -20,14 +22,16 @@ def check_link(url):
     logger.error("❌ Error checking the link, please ensure the link is correct\n")
     return False
   
-  # Determine the platform (spotify/deezer)
-  if "spotify.com" in url:
+  # Determine the platform (apple/spotify/deezer)
+  if "apple.com" in url:
+    platform = "apple"
+  elif "spotify.com" in url:
     platform = "spotify"
   elif "deezer.com" in url:
     platform = "deezer"
   else:
     platform = None 
-    logger.error("❌ Error determining platform, only Spotify and Deezer are allowed")
+    logger.error("❌ Error determining platform, only Apple, Spotify and Deezer are allowed")
 
   # Determine the type (playlist/album)
   if "/playlist/" in url:

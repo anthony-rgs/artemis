@@ -5,6 +5,9 @@ from datetime import datetime
 # =======================
 # Collection URLS
 # =======================
+URL_APPLE_PLAYLIST = "https://music.apple.com/fr/playlist/jul-les-indispensables/pl.ce24519562f44ed8b85e238070db34fc"
+URL_APPLE_ALBUM = "https://music.apple.com/fr/album/favourite-worst-nightmare/251126923"
+URL_APPLE_ALBUM_DISCS = "https://music.apple.com/fr/album/ta13oo/1408388537"
 URL_DEEZER_PLAYLIST = "https://www.deezer.com/en/playlist/10071848282"
 URL_DEEZER_ALBUM = "https://www.deezer.com/en/album/635038521"
 URL_DEEZER_ALBUM_DISCS = "https://www.deezer.com/en/album/68848411"
@@ -45,11 +48,12 @@ SELENIUM_TIMEOUT = 10  # Explicit wait timeout (seconds)
 # =======================
 
 COLLECTIONS_FOLDER = "collections"  # Folder where collections JSON files are saved
+COLLECTIONS_APPLE_FOLDER = os.path.join(COLLECTIONS_FOLDER, "apple")
 COLLECTIONS_DEEZER_FOLDER = os.path.join(COLLECTIONS_FOLDER, "deezer")
 COLLECTIONS_SPOTIFY_FOLDER = os.path.join(COLLECTIONS_FOLDER, "spotify")
 COLLECTIONS_SPOTIFY_BILLION_CLUB_FOLDER = os.path.join(COLLECTIONS_FOLDER, "billion-club")
 # Create folders if they doesn't exist
-for folder in [COLLECTIONS_FOLDER, COLLECTIONS_SPOTIFY_FOLDER, COLLECTIONS_DEEZER_FOLDER, COLLECTIONS_SPOTIFY_BILLION_CLUB_FOLDER]:
+for folder in [COLLECTIONS_FOLDER, COLLECTIONS_APPLE_FOLDER, COLLECTIONS_DEEZER_FOLDER, COLLECTIONS_SPOTIFY_FOLDER, COLLECTIONS_SPOTIFY_BILLION_CLUB_FOLDER]:
   os.makedirs(folder, exist_ok=True)
 
 
@@ -60,8 +64,19 @@ for folder in [COLLECTIONS_FOLDER, COLLECTIONS_SPOTIFY_FOLDER, COLLECTIONS_DEEZE
 SCROLL_ITERATIONS = 20  # 1 scroll iteration corresponds to one visible line on the page (Don't set it too high, take it slow with Deezer)
 CUSTOM_OVERLAY_ID="artemis-custom-overlay"
 
+# Apple
+APPLE_TRACK_COUNT_ALBUM_INDEX = 3  # Position of track count in a split
+APPLE_TRACK_COUNT_PLAYLIST_INDEX = 0  # Position of track count in a split
+APPLE_TRACK_COUNT_SELECTOR = '[data-testid="tracklist-footer-description"]'  # Track count selector
+APPLE_TITLE_SELECTOR = '[data-testid="non-editable-product-title"]'  # Title selector
+APPLE_SUBTITLE_SELECTOR = '[data-testid="product-subtitles"]'  # Subtitle selecto
+APPLE_TRACKLIST_ROW_SELECTOR = '[data-testid="track-list-item"]'  # Selector for tracklist row
+APPLE_TRACK_COLUMN_SELECTOR = '[data-testid="song-name-wrapper"]'  # Track column selector
+APPLE_ARTIST_COLUMN_SELECTOR = '[data-testid="track-column-secondary"]'  # Artist column selector
+APPLE_ALBUM_COLUMN_SELECTOR = '[data-testid="track-column-tertiary"]'  # Album column selector
+APPLE_SCROLL_CONTAINER = '[data-testid="main-section"]'  # Scroll container
+
 # Spotify
-SPOTIFY_BASE_URL = "https://open.spotify.com/"
 SPOTIFY_BILLION_CLUB_URL = "https://open.spotify.com/playlist/37i9dQZF1DX7iB3RCnBnN4"
 SPOTIFY_TITLE_SELECTOR = '[data-testid="entityTitle"]'  # Selector for title
 SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH = "//main/section/div[1]/div[2]/div[2]/div[1]/div[2]/span"  # ALBUM -> Xpath from main to total tacks span

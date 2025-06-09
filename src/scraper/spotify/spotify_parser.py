@@ -1,4 +1,6 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 from src.config import SPOTIFY_TITLE_SELECTOR, SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH, SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR, SPOTIFY_PLAY_COUNT_SELECTOR, SPOTIFY_TRACK_IMAGE_XPATH
 
@@ -17,9 +19,18 @@ def spotify_count_tracks(driver, content_type):
       # Find_element -> take the first element
       row_count_element = driver.find_element(By.XPATH, SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH).text
       row_count = int(row_count_element.split()[0])
-    
+    # https://open.spotify.com/playlist/2mJrr2tj7uv4POUZsSiOto
+
     elif content_type == "playlist":
-      row_count_element = driver.find_element(By.CSS_SELECTOR, f"[{SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR}]")
+      row_count_elements = WebDriverWait(driver, 10).until( 
+          lambda d: len(d.find_elements(By.CSS_SELECTOR, f"[{SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR}]")) >= 2
+      )
+      # Lambda is an anonymous function that takes 'd' (the Selenium driver) as a parameter
+      # It uses find_elements to search for all elements with the desired attribute
+      # And returns True only if there are at least two of them
+
+      row_count_elements = driver.find_elements(By.CSS_SELECTOR, f"[{SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR}]")
+      row_count_element = row_count_elements[1]  # 1 -> second element
       row_count = int(row_count_element.get_attribute(SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR)) - 1
 
     if row_count:

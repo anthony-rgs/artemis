@@ -1,2 +1,2 @@
 [start]
-cmd = "python3 -m billion_club"
+cmd = "python3 billion_club.py"

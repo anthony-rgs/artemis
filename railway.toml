@@ -1,2 +1,5 @@
-[phases.start]
+[build]
+nixpacksPlan = true
+
+[start]
 cmd = "python3 -m billion_club"

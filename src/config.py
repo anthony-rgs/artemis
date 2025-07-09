@@ -68,13 +68,14 @@ CUSTOM_OVERLAY_ID="artemis-custom-overlay"
 APPLE_TRACK_COUNT_ALBUM_INDEX = 3  # Position of track count in a split
 APPLE_TRACK_COUNT_PLAYLIST_INDEX = 0  # Position of track count in a split
 APPLE_TRACK_COUNT_SELECTOR = '[data-testid="tracklist-footer-description"]'  # Track count selector
-APPLE_TITLE_SELECTOR = '[data-testid="non-editable-product-title"]'  # Title selector
-APPLE_SUBTITLE_SELECTOR = '[data-testid="product-subtitles"]'  # Subtitle selecto
+APPLE_TITLE_SELECTOR = '[data-testid="non-editable-product-title"]'  # Title page
+APPLE_SUBTITLE_SELECTOR = '[data-testid="product-subtitles"]'  # Subtitle page
 APPLE_TRACKLIST_ROW_SELECTOR = '[data-testid="track-list-item"]'  # Selector for tracklist row
 APPLE_TRACK_COLUMN_SELECTOR = '[data-testid="song-name-wrapper"]'  # Track column selector
 APPLE_ARTIST_COLUMN_SELECTOR = '[data-testid="track-column-secondary"]'  # Artist column selector
 APPLE_ALBUM_COLUMN_SELECTOR = '[data-testid="track-column-tertiary"]'  # Album column selector
 APPLE_SCROLL_CONTAINER = '[data-testid="main-section"]'  # Scroll container
+APPLE_TRACKS_CONTAINER = '[data-testid="tracklist"]'  # Tracks container
 
 # Spotify
 SPOTIFY_BILLION_CLUB_URL = "https://open.spotify.com/playlist/37i9dQZF1DX7iB3RCnBnN4"

@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from src.config import APPLE_SCROLL_CONTAINER
+from src.config import APPLE_SCROLL_CONTAINER, APPLE_TRACKS_CONTAINER
 from src.utils.logger import logger 
 
 
@@ -12,6 +12,8 @@ def get_apple_scroll_container(driver):
 
   try:
     WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, APPLE_SCROLL_CONTAINER)))
+    WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, APPLE_TRACKS_CONTAINER)))
+
     container = driver.find_element(By.CSS_SELECTOR, APPLE_SCROLL_CONTAINER)
       
     logger.info("✅ Scroll container retrieved\n")

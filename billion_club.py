@@ -14,9 +14,6 @@ def billion_club():
   # Start timer
   start_billion_club_script = time.perf_counter()
 
-  # If "y" -> run both scripts; else -> update last billion club JSON file data
-  create_new_json = input("Create a new JSON ? (y) ").strip().lower()
-  print("")
 
   # Variables
   url = SPOTIFY_BILLION_CLUB_URL
@@ -25,11 +22,10 @@ def billion_club():
   logger.info("💎 Billion club script running...\n")
 
   # Scrape Billion club playlist
-  if create_new_json == "y":
-    logger.info("#######################################")
-    logger.info("###        SCRAPE COLLECTION        ###")
-    logger.info("#######################################\n")
-    tracks, collection_json = scrape_collection(url, kill_script = False)
+  logger.info("#######################################")
+  logger.info("###        SCRAPE COLLECTION        ###")
+  logger.info("#######################################\n")
+  tracks, collection_json = scrape_collection(url, kill_script = False)
 
   # Update Billion club playlist data
   logger.info("#######################################")

@@ -43,7 +43,10 @@ def scrape_collection(tracks_url, json_save = True, kill_script = True ):
     extract_tracks = PLATFORM_FUNCTIONS[platform]["extract_tracks"][content_type]
 
     # Get total tracks
-    total_tracks = retry_function(count_tracks, driver, content_type)
+    # total_tracks = retry_function(count_tracks, driver, content_type)
+    
+    # to delete
+    total_tracks = 20
 
     # Get scroll container
     scroll_container = get_scroll_container(driver)

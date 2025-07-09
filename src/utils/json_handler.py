@@ -29,10 +29,11 @@ def create_json_file(tracks, link, name, platform, content_type):
 
   data = {
     "type": content_type,
+    "platform": platform,
     "name": name,
     "length": length,
     "link": link,
-    "tracks": tracks
+    "tracks": tracks,
   }
 
   folder = f"{COLLECTIONS_FOLDER}/{platform}"

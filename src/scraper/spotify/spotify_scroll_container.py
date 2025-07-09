@@ -17,7 +17,7 @@ def get_spotify_scroll_container(driver):
       return None
 
     logger.info("✅ Scroll container retrieved\n")
-    return containers[1]  # The second container holds the track list
+    return containers[2]  # The third container holds the track list
 
   except Exception as e:
     logger.error(f"❌ Error retrieving the scroll container: {e}", exc_info=True)

@@ -3,8 +3,9 @@ nixPkgs = ["python311", "gcc"]
 
 [phases.install]
 cmds = [
+  "python -m venv --copies /opt/venv",
+  ". /opt/venv/bin/activate",
   "pip install -r requirements.txt"
-  # "python3 -m playwright install --with-deps"
 ]
 
 [phases.start]

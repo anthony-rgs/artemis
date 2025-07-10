@@ -3,8 +3,7 @@ nixPkgs = ["python311", "gcc"]
 
 [phases.install]
 cmds = [
-  "python3 -m pip install -r requirements.txt",
-  "python3 -m playwright install --with-deps"
+  "python -m playwright install --with-deps"
 ]
 
 [phases.start]

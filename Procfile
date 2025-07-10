@@ -1,1 +1,1 @@
-web: python3 billion_club.py
+web: sh start.sh

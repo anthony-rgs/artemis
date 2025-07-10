@@ -41,7 +41,7 @@ def spotify_update_tracks_data(collection_json):
       tracks_with_play_count = [track for track in json_file["tracks"] if "play_count" in track]
       tracks_without_play_count = [track for track in json_file["tracks"] if "play_count" not in track]
       other_tracks = tracks_without_play_count[1:]
-      logger.info(f"📊 Tracks updated : {len(tracks_with_play_count)}/{len(json_file["tracks"])}")
+      logger.info(f"📊 Tracks updated : {len(tracks_with_play_count)}/{len(json_file['tracks'])}")
 
       if not tracks_without_play_count:
         logger.info("✅ New tracks data fetched\n")

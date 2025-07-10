@@ -45,9 +45,6 @@ def scrape_collection(tracks_url, json_save = True, kill_script = True ):
     # Get total tracks
     total_tracks = retry_function(count_tracks, page, content_type)
 
-    # to delete
-    total_tracks = 20
-
     # Get scroll container
     scroll_container = get_scroll_container(page)
     

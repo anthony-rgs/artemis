@@ -3,9 +3,9 @@ nixPkgs = ["python311", "gcc"]
 
 [phases.install]
 cmds = [
-    "python3 -m pip install --upgrade pip",
+  "python3 -m pip install --upgrade pip",
   "python3 -m pip install playwright",
-  "python3 -m playwright install --with-deps
+  "python3 -m playwright install --with-deps"
 ]
 
 [phases.start]

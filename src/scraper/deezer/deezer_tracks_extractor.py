@@ -1,16 +1,13 @@
 import re
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 from src.config import DEEZER_TRACKLIST_ROW_SELECTOR, DEEZER_INFORMATIONS_SELECTOR, DEEZER_TITLE_SELECTOR, DEEZER_ALBUM_ARTIST_NAME_SELECTOR, DEEZER_TRACKLIST_ROW_TRACK_SELECTOR, DEEZER_TRACKLIST_ROW_TRACK_SELECTOR, DEEZER_PLAYLIST_ALBUM_SELECTOR, DEEZER_TRACKLIST_ROW_ARTIST_SELECTOR
 
 # Clean Deezer page tracks 
-def get_clean_page_tracks(driver, tracks):
+def get_clean_page_tracks(page, tracks):
   # Waiting for elements
-  WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, DEEZER_TRACKLIST_ROW_SELECTOR)))
+  page.wait_for_selector(DEEZER_TRACKLIST_ROW_SELECTOR, timeout=10_000)
 
   # Get all page tracks
-  page_tracks = driver.find_elements(By.CSS_SELECTOR, DEEZER_TRACKLIST_ROW_SELECTOR)
+  page_tracks = page.query_selector_all(DEEZER_TRACKLIST_ROW_SELECTOR)
 
   # Convert tracks list to a set of tuples for fast lookup
   existing_tracks = {tuple(track) for track in tracks}
@@ -19,39 +16,41 @@ def get_clean_page_tracks(driver, tracks):
 
 
 # Extract Deezer album tracks
-def deezer_extract_album_tracks(driver, tracks, _):
-  page_tracks, existing_tracks = get_clean_page_tracks(driver, tracks)
+def deezer_extract_album_tracks(page, tracks, _):
+  page_tracks, existing_tracks = get_clean_page_tracks(page, tracks)
   
   # Album informations
-  top_container_informations = driver.find_element(By.CSS_SELECTOR, DEEZER_INFORMATIONS_SELECTOR)
-  album_name = top_container_informations.find_element(By.CSS_SELECTOR, DEEZER_TITLE_SELECTOR).text
-  album_artist_name = driver.find_element(By.CSS_SELECTOR, DEEZER_ALBUM_ARTIST_NAME_SELECTOR).text  # Artist who created the album
-  album_link = driver.current_url
+  top_container_informations = page.query_selector(DEEZER_INFORMATIONS_SELECTOR)
+  album_name = top_container_informations.query_selector(DEEZER_TITLE_SELECTOR).text_content()
+  album_artist_name = page.query_selector(DEEZER_ALBUM_ARTIST_NAME_SELECTOR).text_content()
+  album_link = page.url
   
-  # Remove the default wait time for the driver
+  # Remove the default wait time for Playwright
   # The artist cell in the track row may be empty
-  driver.implicitly_wait(0) 
-  
+  page.set_default_timeout(0)  
+
   for page_track in page_tracks:
     try:
       # Deezer doesn't include the album artist in the track row
-      artists = [album_artist_name] # Add album artist name on a empty array
+      artists = [album_artist_name] # Start array with album artist name
 
-      first_div = page_track.find_element(By.TAG_NAME, "div")
+      first_div = page_track.query_selector("div")
     
       # Get and clean track name : 1. Delilah (pull me out of this) -> Delilah (pull me out of this)
       # ^    → Start of the string  
       # \d+  → Remove one or more digits (track number)  
       # \.   → Removes the first literal dot (the backslash \ is used to escape the dot, as dot normally means "any character" in regex)
       # \s*  → Remove any spaces after the dot  
-      track_name = first_div.find_element(By.CSS_SELECTOR, DEEZER_TRACKLIST_ROW_TRACK_SELECTOR)
-      track_name_cleaned = re.sub(r"^\d+\.\s*", "", track_name.text)
+      track_name_element = page_track.query_selector(DEEZER_TRACKLIST_ROW_TRACK_SELECTOR)
+      track_name_text = track_name_element.text_content()
+      track_name_cleaned = re.sub(r"^\d+\.\s*", "", track_name_text)
 
       # Get featured artists
-      featured_artists = first_div.find_elements(By.CSS_SELECTOR, DEEZER_TRACKLIST_ROW_ARTIST_SELECTOR)
+      featured_artists = first_div.query_selector_all(DEEZER_TRACKLIST_ROW_ARTIST_SELECTOR)
+
       if featured_artists:
         for featured_artist in featured_artists:
-          artists.append(featured_artist.text)
+          artists.append(featured_artist.text_content())
       
       # Extract track informations
       track_info = (
@@ -70,21 +69,21 @@ def deezer_extract_album_tracks(driver, tracks, _):
     except Exception:
       pass
   
-  # Reset driver.implicitly_wait to its default setting
-  driver.implicitly_wait(10)
+  # Reset Playwright wait to its default setting
+  page.set_default_timeout(10000)
   return tracks
 
 
 # Extract Deezer playlist tracks
-def deezer_extract_playlist_tracks(driver, tracks, _):
-  page_tracks, existing_tracks = get_clean_page_tracks(driver, tracks)
+def deezer_extract_playlist_tracks(page, tracks, _):
+  page_tracks, existing_tracks = get_clean_page_tracks(page, tracks)
 
   for page_track in page_tracks:
     try:
-      first_div = page_track.find_element(By.TAG_NAME, "div")
-      artists = first_div.find_elements(By.CSS_SELECTOR, DEEZER_TRACKLIST_ROW_ARTIST_SELECTOR)
-      album = first_div.find_element(By.CSS_SELECTOR, DEEZER_PLAYLIST_ALBUM_SELECTOR)
-      track_name = first_div.find_element(By.CSS_SELECTOR, DEEZER_TRACKLIST_ROW_TRACK_SELECTOR)
+      first_div = page_track.query_selector("div")
+      artists = first_div.query_selector_all(DEEZER_TRACKLIST_ROW_ARTIST_SELECTOR)
+      album = first_div.query_selector(DEEZER_PLAYLIST_ALBUM_SELECTOR)
+      track_name = first_div.query_selector(DEEZER_TRACKLIST_ROW_TRACK_SELECTOR)
       
       # Check if there are data
       if not (album and artists and track_name):
@@ -92,10 +91,10 @@ def deezer_extract_playlist_tracks(driver, tracks, _):
 
       # Extract track informations
       track_info = (
-        album.text,  # Album name
+        album.text_content(),  # Album name
         album.get_attribute('href'),  # Album link
-        tuple(artist.text for artist in artists if artist.text.strip()),  # Artists (as tuple)
-        track_name.text,  # Track name
+        tuple(artist.text_content() for artist in artists if artist.text_content().strip()),  # Artists (as tuple)
+        track_name.text_content(),  # Track name
         "",  # No track link...
       )
 

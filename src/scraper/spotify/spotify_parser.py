@@ -1,35 +1,29 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-
 from src.config import SPOTIFY_TITLE_SELECTOR, SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH, SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR, SPOTIFY_PLAY_COUNT_SELECTOR, SPOTIFY_TRACK_IMAGE_XPATH
 
 from src.utils.logger import logger 
 from src.utils.spotify import create_spotify_embed, create_spotify_iframe
 
-from src.scraper.driver import close_driver
+from src.scraper.playwright import close_playwright
 
 
 # Retrieve the total number of tracks in a Spotify page
-def spotify_count_tracks(driver, content_type):
+def spotify_count_tracks(page, content_type):
   logger.info("🚀 Retrieving number of tracks...")
 
   try: 
     if content_type == "album":
       # Find_element -> take the first element
-      row_count_element = driver.find_element(By.XPATH, SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH).text
-      row_count = int(row_count_element.split()[0])
-    # https://open.spotify.com/playlist/2mJrr2tj7uv4POUZsSiOto
+      row_count_element = page.locator(SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH).first.text_content()
+      row_count = int(row_count_element.split()[0]) if row_count_element else 0
+
 
     elif content_type == "playlist":
-      row_count_elements = WebDriverWait(driver, 10).until( 
-          lambda d: len(d.find_elements(By.CSS_SELECTOR, f"[{SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR}]")) >= 2
+      page.wait_for_function(
+        f'document.querySelectorAll("[{SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR}]").length >= 2',
+        timeout=10_000
       )
-      # Lambda is an anonymous function that takes 'd' (the Selenium driver) as a parameter
-      # It uses find_elements to search for all elements with the desired attribute
-      # And returns True only if there are at least two of them
 
-      row_count_elements = driver.find_elements(By.CSS_SELECTOR, f"[{SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR}]")
+      row_count_elements = page.query_selector_all(f"[{SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR}]")
       row_count_element = row_count_elements[1]  # 1 -> second element
       row_count = int(row_count_element.get_attribute(SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR)) - 1
 
@@ -39,15 +33,15 @@ def spotify_count_tracks(driver, content_type):
 
   except Exception:
     logger.error(f"❌ Failed to retrieve number of Spotify tracks. Is there any track available ?", exc_info=True)
-    close_driver(driver)
+    close_playwright(page)
 
 
 # Extracts the name from the Spotify webpage
-def spotify_extract_name(driver):
+def spotify_extract_name(page):
   logger.info("🚀 Extracting Spotify name...")
 
   try:
-    name = driver.find_element(By.CSS_SELECTOR, SPOTIFY_TITLE_SELECTOR).text
+    name = page.query_selector(SPOTIFY_TITLE_SELECTOR).inner_text()
 
     if name:
       logger.info(f"✅ Spotify name: {name}\n")
@@ -58,11 +52,13 @@ def spotify_extract_name(driver):
 
 
 # Get spotify play count from a Spotify music page
-def spotify_extract_play_count(driver):
+def spotify_extract_play_count(page):
   logger.info("🚀 Extracting Spotify track play count...")
   
   try:
-    track_play_count = driver.find_element(By.CSS_SELECTOR, f"{SPOTIFY_PLAY_COUNT_SELECTOR}").text
+    page.wait_for_selector(SPOTIFY_PLAY_COUNT_SELECTOR, timeout=5000)
+
+    track_play_count = page.query_selector(SPOTIFY_PLAY_COUNT_SELECTOR).inner_text()
     track_play_count_formatted = int(track_play_count.replace(",", ""))
 
     if track_play_count_formatted:
@@ -76,7 +72,7 @@ def spotify_extract_play_count(driver):
 
 
 # Update a Spotify track data
-def spotify_scrap_more_track_data(driver, track_link, album_link):
+def spotify_scrap_more_track_data(page, track_link, album_link):
   try:
     # Track embed & iframe
     track_embed = create_spotify_embed(track_link)
@@ -87,13 +83,13 @@ def spotify_scrap_more_track_data(driver, track_link, album_link):
     album_iframe = create_spotify_iframe(track_embed)
 
     # Open track page
-    driver.get(track_link)
+    page.goto(track_link)
 
     # Get track count
-    track_play_count = spotify_extract_play_count(driver)
+    track_play_count = spotify_extract_play_count(page)
 
     # Get track image src
-    track_img_src = driver.find_element(By.XPATH, SPOTIFY_TRACK_IMAGE_XPATH).get_attribute('src')
+    track_img_src = page.query_selector(f'xpath={SPOTIFY_TRACK_IMAGE_XPATH}').get_attribute('src')
 
     # New track data
     new_track_data = {

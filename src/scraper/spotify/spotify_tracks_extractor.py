@@ -1,16 +1,14 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-from src.config import SPOTIFY_TRACKLIST_ROW_SELECTOR, SPOTIFY_TRACK_COLUMN_SELECTOR, SPOTIFY_ALBUM_COLUMN_SELECTOR, SPOTIFY_TITLE_SELECTOR
+from src.config import BASE_SPOTIFY_URL, SPOTIFY_TRACKLIST_ROW_SELECTOR, SPOTIFY_TRACK_COLUMN_SELECTOR, SPOTIFY_ALBUM_COLUMN_SELECTOR, SPOTIFY_TITLE_SELECTOR
 from src.utils.logger import logger
 
+
 # Clean Spotify page tracks 
-def get_clean_page_tracks(driver, tracks, total_tracks):
+def get_clean_page_tracks(page, tracks, total_tracks):
   # Waiting for elements
-  WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, SPOTIFY_TRACKLIST_ROW_SELECTOR)))
+  page.wait_for_selector(SPOTIFY_TRACKLIST_ROW_SELECTOR, timeout=10_000, state="attached")
 
   # Get all page tracks
-  page_tracks = driver.find_elements(By.CSS_SELECTOR, SPOTIFY_TRACKLIST_ROW_SELECTOR)
+  page_tracks = page.query_selector_all(SPOTIFY_TRACKLIST_ROW_SELECTOR)
 
   # Convert tracks list to a set of tuples for fast lookup
   existing_tracks = {tuple(track) for track in tracks}
@@ -25,18 +23,18 @@ def get_clean_page_tracks(driver, tracks, total_tracks):
 
 
 # Extract Spotify album tracks
-def spotify_extract_album_tracks(driver, tracks, total_tracks):
-  page_tracks, existing_tracks = get_clean_page_tracks(driver, tracks, total_tracks)
+def spotify_extract_album_tracks(page, tracks, total_tracks):
+  page_tracks, existing_tracks = get_clean_page_tracks(page, tracks, total_tracks)
   
   # The albums contain few tracks, so it's not an issue to load their data here, within the scroll loop
-  album_name = driver.find_element(By.CSS_SELECTOR, SPOTIFY_TITLE_SELECTOR).text
-  album_link = driver.current_url
+  album_name = page.locator(SPOTIFY_TITLE_SELECTOR).text_content()
+  album_link = page.url
   
   for page_track in page_tracks:
     try:
       # Element
-      track_element = page_track.find_element(By.CSS_SELECTOR, SPOTIFY_TRACK_COLUMN_SELECTOR)
-      track_links = track_element.find_elements(By.TAG_NAME, 'a')
+      track_element = page_track.query_selector(SPOTIFY_TRACK_COLUMN_SELECTOR)
+      track_links = track_element.query_selector_all("a")
       
       # Check if there are data
       if not track_links:
@@ -46,9 +44,9 @@ def spotify_extract_album_tracks(driver, tracks, total_tracks):
       track_info = (
         album_name,  # Album name
         album_link,  # Album link
-        tuple(link.text for link in track_links[1:] if link.text.strip()),  # Artists (as tuple)
-        track_links[0].text,  # Track name
-        track_links[0].get_attribute("href"),  # Track link
+        tuple(link.text_content().strip() for link in track_links[1:] if link.text_content().strip()),  # Artists (as tuple)
+        track_links[0].text_content(),  # Track name
+        BASE_SPOTIFY_URL + track_links[0].get_attribute("href"),  # Track link
       )
 
       # Add only if not already in the set
@@ -63,18 +61,18 @@ def spotify_extract_album_tracks(driver, tracks, total_tracks):
 
 
 # Extract Spotify playlist tracks
-def spotify_extract_playlist_tracks(driver, tracks, total_tracks):
-  page_tracks, existing_tracks = get_clean_page_tracks(driver, tracks, total_tracks)
+def spotify_extract_playlist_tracks(page, tracks, total_tracks):
+  page_tracks, existing_tracks = get_clean_page_tracks(page, tracks, total_tracks)
 
   for page_track in page_tracks:
     try:
       # Elements
       elements = {
-        "album": page_track.find_element(By.CSS_SELECTOR, SPOTIFY_ALBUM_COLUMN_SELECTOR),
-        "track": page_track.find_element(By.CSS_SELECTOR, SPOTIFY_TRACK_COLUMN_SELECTOR)
+          "album": page_track.query_selector(SPOTIFY_ALBUM_COLUMN_SELECTOR),
+          "track": page_track.query_selector(SPOTIFY_TRACK_COLUMN_SELECTOR)
       }
-      album_links = elements["album"].find_elements(By.TAG_NAME, 'a')
-      track_links = elements["track"].find_elements(By.TAG_NAME, 'a')
+      album_links = elements["album"].query_selector_all('a')
+      track_links = elements["track"].query_selector_all('a')
 
       # Check if there are data
       if not (track_links and album_links):
@@ -82,11 +80,11 @@ def spotify_extract_playlist_tracks(driver, tracks, total_tracks):
 
       # Extract track informations
       track_info = (
-        album_links[0].text,  # Album name
-        album_links[0].get_attribute("href"),  # Album link
-        tuple(link.text for link in track_links[1:] if link.text.strip()),  # Artists (as tuple)
-        track_links[0].text,  # Track name
-        track_links[0].get_attribute("href"),  # Track link
+        album_links[0].inner_text(),  # Album name
+        BASE_SPOTIFY_URL + album_links[0].get_attribute("href"),  # Album link
+        tuple(link.inner_text() for link in track_links[1:] if link.inner_text().strip()),  # Artists (as tuple)
+        track_links[0].inner_text(),  # Track name
+        BASE_SPOTIFY_URL + track_links[0].get_attribute("href"),  # Track link
       )
 
       # Add only if not already in the set

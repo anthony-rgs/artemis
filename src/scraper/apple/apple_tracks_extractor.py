@@ -1,17 +1,13 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-
 from src.config import APPLE_TRACKLIST_ROW_SELECTOR, APPLE_TITLE_SELECTOR, APPLE_SUBTITLE_SELECTOR, APPLE_TRACK_COLUMN_SELECTOR, APPLE_ARTIST_COLUMN_SELECTOR, APPLE_ALBUM_COLUMN_SELECTOR
 
 
 # Clean Apple page tracks 
-def get_clean_page_tracks(driver, tracks):
+def get_clean_page_tracks(page, tracks):
   # Waiting for elements
-  WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, APPLE_TRACKLIST_ROW_SELECTOR)))
+  page.wait_for_selector(APPLE_TRACKLIST_ROW_SELECTOR, timeout=10_000)
 
   # Get all page tracks
-  page_tracks = driver.find_elements(By.CSS_SELECTOR, APPLE_TRACKLIST_ROW_SELECTOR)
+  page_tracks = page.query_selector_all(APPLE_TRACKLIST_ROW_SELECTOR)
 
   # Convert tracks list to a set of tuples for fast lookup
   existing_tracks = {tuple(track) for track in tracks}
@@ -20,30 +16,29 @@ def get_clean_page_tracks(driver, tracks):
 
 
 # Extract Apple album tracks
-def apple_extract_album_tracks(driver, tracks, _):
-  page_tracks, existing_tracks = get_clean_page_tracks(driver, tracks)
+def apple_extract_album_tracks(page, tracks, _):
+  page_tracks, existing_tracks = get_clean_page_tracks(page, tracks)
   
   # Album informations
-  album_name = driver.find_element(By.CSS_SELECTOR, APPLE_TITLE_SELECTOR)
-  album_artists_element = driver.find_element(By.CSS_SELECTOR, APPLE_SUBTITLE_SELECTOR)
-  album_artists_name = album_artists_element.find_elements(By.CSS_SELECTOR, 'a')
-  album_link = driver.current_url
+  album_name = page.query_selector(APPLE_TITLE_SELECTOR).text_content()
+  album_artists_element = page.query_selector(APPLE_SUBTITLE_SELECTOR)
+  album_artists_name = [a.text_content() for a in album_artists_element.query_selector_all('a')]
+  album_link = page.url
 
   for page_track in page_tracks:
     try:
-      track_element = page_track.find_element(By.CSS_SELECTOR, APPLE_TRACK_COLUMN_SELECTOR)
-      track_link = track_element.find_element(By.CSS_SELECTOR, 'a')
-      track_name = track_element.find_element(By.CSS_SELECTOR, 'div')
+      track_element = page_track.query_selector(APPLE_TRACK_COLUMN_SELECTOR)
+      track_link = track_element.query_selector('a')
+      track_name = track_element.query_selector('div')
 
-      # Extract track informations
       track_info = (
-        album_name.text,  # Album name
+        album_name,  # Album name
         album_link,  # Album link
-        tuple(artist.text for artist in album_artists_name if artist.text.strip()),  # Artists (as tuple)
-        track_name.text,  # Track name
+        tuple(artist for artist in album_artists_name if artist.strip()),  # Artists (as tuple)
+        track_name.text_content(),  # Track name
         track_link.get_attribute('href'),  # Track link
       )
-      
+
       # Add only if not already in the set
       if track_info not in existing_tracks:
         tracks.append(track_info)
@@ -51,39 +46,37 @@ def apple_extract_album_tracks(driver, tracks, _):
 
     except Exception:
       pass
-  
+
   return tracks
 
 
 # Extract Apple playlist tracks
-def apple_extract_playlist_tracks(driver, tracks, _):
-  page_tracks, existing_tracks = get_clean_page_tracks(driver, tracks)
+def apple_extract_playlist_tracks(page, tracks, _):
+  page_tracks, existing_tracks = get_clean_page_tracks(page, tracks)
 
   for page_track in page_tracks:
     try:
+      artists_element = page_track.query_selector(APPLE_ARTIST_COLUMN_SELECTOR)
+      artists = artists_element.query_selector_all("span")
 
-      artists_element = page_track.find_element(By.CSS_SELECTOR, APPLE_ARTIST_COLUMN_SELECTOR)
-      artists = artists_element.find_elements(By.CSS_SELECTOR, "span")
-     
-      album = page_track.find_element(By.CSS_SELECTOR, APPLE_ALBUM_COLUMN_SELECTOR).find_element(By.CSS_SELECTOR, 'a')
+      album = page_track.query_selector(f"{APPLE_ALBUM_COLUMN_SELECTOR} a")
 
-      track_element = page_track.find_element(By.CSS_SELECTOR, APPLE_TRACK_COLUMN_SELECTOR)
-      track_link = track_element.find_element(By.CSS_SELECTOR, 'a')
-      track_name = track_element.find_element(By.CSS_SELECTOR, 'div')
-
+      track_element = page_track.query_selector(APPLE_TRACK_COLUMN_SELECTOR)
+      track_link = track_element.query_selector('a')
+      track_name = track_element.query_selector('div')
+      
       # Check if there are data
       if not (album and artists and track_link and track_name):
         continue  
 
       # Extract track informations
       track_info = (
-        album.text,  # Album name
+        album.text_content(),  # Album name
         album.get_attribute('href'),  # Album link
-        tuple(artist.text for artist in artists if artist.text.strip()),  # Artists (as tuple)
-        track_name.text,  # Track name
+        tuple(artist.text_content().strip() for artist in artists if artist.text_content().strip()),  # Artists (as tuple)
+        track_name.text_content(),  # Track name
         track_link.get_attribute('href'),  # Track link
       )
-
 
       # Add only if not already in the set
       if track_info not in existing_tracks:

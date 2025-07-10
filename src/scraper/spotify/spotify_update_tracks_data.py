@@ -6,7 +6,7 @@ from src.utils.retry import retry_function
 from src.utils.logger import logger 
 from src.utils.json_handler import get_latest_json_file, load_json_from_file, update_json_file, move_json_file
 
-from src.scraper.driver import init_driver, close_driver
+from src.scraper.playwright import launch_playwright, close_playwright
 from src.scraper.spotify.spotify_parser import spotify_scrap_more_track_data
 
 
@@ -25,10 +25,10 @@ def spotify_update_tracks_data(collection_json):
   folder = f"{COLLECTIONS_SPOTIFY_BILLION_CLUB_FOLDER}/"
   json_file_path = get_latest_json_file(folder)
 
-  # Init driver
-  driver = retry_function(init_driver)
+  # Init playwright
+  page, browser, playwright = retry_function(launch_playwright)
   
-  if driver: 
+  if page: 
     logger.info("🚀 Fetching new tracks data...")
 
     while True:
@@ -54,7 +54,7 @@ def spotify_update_tracks_data(collection_json):
         # Scrap more Spotify track data
         track_link =  track["track_link"]
         album_link = track["album_link"]
-        track_updated = spotify_scrap_more_track_data(driver, track_link, album_link)    
+        track_updated = spotify_scrap_more_track_data(page, track_link, album_link)    
         
         # Merge track data and new track data
         new_track_data = {**track, **track_updated}
@@ -76,4 +76,4 @@ def spotify_update_tracks_data(collection_json):
 
     logger.info(f"🎉 You rock, Artémis !\n")
 
-    close_driver(driver)
+    close_playwright(page, browser, playwright)

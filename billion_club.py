@@ -14,7 +14,6 @@ def billion_club():
   # Start timer
   start_billion_club_script = time.perf_counter()
 
-
   # Variables
   url = SPOTIFY_BILLION_CLUB_URL
   collection_json = False

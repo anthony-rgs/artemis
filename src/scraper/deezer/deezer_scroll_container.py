@@ -1,21 +1,19 @@
 import time
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
+
 from src.config import DEEZER_CLOSE_COOKIE_ID, DEEZER_SCROLL_CONTAINER
 from src.utils.logger import logger 
 
 # Retrieves the Deezer scroll container that holds the track list
-def get_deezer_scroll_container(driver):
+def get_deezer_scroll_container(page):
   logger.info("🚀 Starting retrieval of scroll container...")
 
   try:
-    WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.TAG_NAME, DEEZER_SCROLL_CONTAINER)))
-    container = driver.find_element(By.TAG_NAME, DEEZER_SCROLL_CONTAINER)
+    page.wait_for_selector(DEEZER_SCROLL_CONTAINER, timeout=10_000)
+    container = page.query_selector(DEEZER_SCROLL_CONTAINER)
     
     if container:
       # Close the cookie modal and wait until it is fully closed before proceeding
-      cookie_button = driver.find_element(By.ID, DEEZER_CLOSE_COOKIE_ID)
+      cookie_button = page.query_selector(f"#{DEEZER_CLOSE_COOKIE_ID}")
 
       if cookie_button:
         time.sleep(1)

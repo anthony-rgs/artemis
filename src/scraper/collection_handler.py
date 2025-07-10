@@ -6,7 +6,7 @@ from src.utils.url_handler import check_link
 from src.utils.json_handler import create_json_file 
 from src.utils.string_utils import format_name
 
-from src.scraper.driver import init_driver, close_driver
+from src.scraper.playwright import launch_playwright, close_playwright
 from src.scraper.scroll_manager import retry_and_check_tracks
 from src.scraper.insert_custom_div import insert_custom_div
 from src.scraper.platform_extractors import PLATFORM_FUNCTIONS
@@ -22,19 +22,19 @@ def scrape_collection(tracks_url, json_save = True, kill_script = True ):
   if check_url:
     platform, content_type = check_url
 
-    # Init driver
-    driver = retry_function(init_driver)
+    # Init playwright
+    page, browser, playwright  = retry_function(launch_playwright)
 
-    if not driver:
+    if not page:
       return None
 
     logger.info(f"🌍 Navigating to {platform} tracks...\n")
     
     # Load page with url 
-    driver.get(tracks_url)
+    page.goto(tracks_url)
 
     # Insert custom div
-    insert_custom_div(driver)
+    insert_custom_div(page)
 
     # Select platform-specific functions
     count_tracks = PLATFORM_FUNCTIONS[platform]["count_tracks"]
@@ -43,19 +43,19 @@ def scrape_collection(tracks_url, json_save = True, kill_script = True ):
     extract_tracks = PLATFORM_FUNCTIONS[platform]["extract_tracks"][content_type]
 
     # Get total tracks
-    # total_tracks = retry_function(count_tracks, driver, content_type)
-    
+    total_tracks = retry_function(count_tracks, page, content_type)
+
     # to delete
     total_tracks = 20
 
     # Get scroll container
-    scroll_container = get_scroll_container(driver)
+    scroll_container = get_scroll_container(page)
     
     # Start scrolling timer
     start_scrolling = time.perf_counter()
 
     # Retrieve all tracks on the page and retry if the tracks are incomplete
-    tracks = retry_function(retry_and_check_tracks, driver, total_tracks, scroll_container, extract_tracks)  # Get tracks
+    tracks = retry_function(retry_and_check_tracks, page, total_tracks, scroll_container, extract_tracks)  # Get tracks
     
     # End scrolling timer
     end_scrolling = time.perf_counter()
@@ -69,7 +69,7 @@ def scrape_collection(tracks_url, json_save = True, kill_script = True ):
       if json_save:
         logger.info("💾 Saving data in JSON file...\n")  
 
-        name = retry_function(extract_name, driver)
+        name = retry_function(extract_name, page)
         formatted_name = retry_function(format_name, name)
         collection_json = create_json_file(tracks, tracks_url, formatted_name, platform, content_type)
 
@@ -80,14 +80,14 @@ def scrape_collection(tracks_url, json_save = True, kill_script = True ):
 
       logger.info(f"🎉 You rock, Artémis !\n")
 
-      # Close driver
-      close_driver(driver, kill_script)
+      # Close playwright
+      close_playwright(page, browser, playwright, kill_script)
 
       return tracks, collection_json
     
     else:
       logger.error(f"💀 Tracks scraping failed after multiple retries... \n")
-      close_driver(driver)
+      close_playwright(page, browser, playwright)
       return None, None
     
   return None, None

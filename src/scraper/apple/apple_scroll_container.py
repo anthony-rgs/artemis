@@ -1,20 +1,16 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-
 from src.config import APPLE_SCROLL_CONTAINER, APPLE_TRACKS_CONTAINER
 from src.utils.logger import logger 
 
 
 # Retrieves the Apple scroll container that holds the track list
-def get_apple_scroll_container(driver):
+def get_apple_scroll_container(page):
   logger.info("🚀 Starting retrieval of scroll container...")
 
   try:
-    WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, APPLE_SCROLL_CONTAINER)))
-    WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, APPLE_TRACKS_CONTAINER)))
+    page.wait_for_selector(APPLE_SCROLL_CONTAINER, timeout=10_000)
+    page.wait_for_selector(APPLE_TRACKS_CONTAINER, timeout=10_000)
 
-    container = driver.find_element(By.CSS_SELECTOR, APPLE_SCROLL_CONTAINER)
+    container = page.query_selector(APPLE_SCROLL_CONTAINER)
       
     logger.info("✅ Scroll container retrieved\n")
     return container

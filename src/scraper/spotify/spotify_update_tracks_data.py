@@ -32,7 +32,7 @@ def spotify_update_tracks_data(collection_json):
     logger.info("🚀 Fetching new tracks data...")
 
     while True:
-      logger.disabled = True  # Disable logger
+      # logger.disabled = True  # Disable logger
       # Load JSON file and return it as a Python dictionary
       json_file = load_json_from_file(json_file_path)
       logger.disabled = False  # Enable logger
@@ -48,7 +48,7 @@ def spotify_update_tracks_data(collection_json):
         break
 
       try:
-        logger.disabled = True  # Disable logger
+        # logger.disabled = True  # Disable logger
         track = tracks_without_play_count[0] # Select the first track
         
         # Scrap more Spotify track data

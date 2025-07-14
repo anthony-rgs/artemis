@@ -15,7 +15,8 @@ def billion_club():
   start_billion_club_script = time.perf_counter()
 
   # Variables
-  url = SPOTIFY_BILLION_CLUB_URL
+  # url = SPOTIFY_BILLION_CLUB_URL
+  url = "https://open.spotify.com/playlist/1ld25V4O1QIDzdkoOXVaeK" # to delete
   collection_json = False
 
   logger.info("💎 Billion club script running...\n")

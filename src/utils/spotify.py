@@ -25,7 +25,7 @@ def create_spotify_iframe(embed_url):
   try: 
     iframe = f"<iframe style='border-radius:12px' src='{embed_url}' width='100%' height='152' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe>"
     
-    logger.info("✅ Spotify iframe created:\n")
+    logger.info("✅ Spotify iframe created\n")
     return iframe
   
   except Exception:

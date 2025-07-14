@@ -63,3 +63,16 @@ def close_playwright(page, browser, playwright, kill_script=True):
 
   if kill_script:
     sys.exit(1)  # kill script
+
+
+# Create new context and page 
+def create_context_and_page(browser):
+  context = browser.new_context()
+  page = context.new_page()
+  return context, page
+
+
+# Close context and page 
+def close_context_and_page(context, page):
+  context.close()
+  page.close()

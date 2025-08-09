@@ -1,4 +1,4 @@
-from src.config import SPOTIFY_TITLE_SELECTOR, SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH, SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR, SPOTIFY_PLAY_COUNT_SELECTOR, SPOTIFY_TRACK_IMAGE_XPATH
+from src.config import SPOTIFY_TITLE_SELECTOR, SPOTIFY_RELEASE_DATE_SELECTOR, SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH, SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR, SPOTIFY_PLAY_COUNT_SELECTOR, SPOTIFY_TRACK_IMAGE_XPATH
 
 from src.utils.logger import logger 
 from src.utils.spotify import create_spotify_embed, create_spotify_iframe
@@ -70,6 +70,23 @@ def spotify_extract_play_count(page):
     logger.error("❌ Failed to extract Spotify track play count\n")
     return None
 
+# Get spotify release date from a Spotify music page
+def spotify_extract_release_date(page):
+  logger.info("🚀 Extracting release date...")
+  
+  try:
+    page.wait_for_selector(SPOTIFY_RELEASE_DATE_SELECTOR, timeout=5000)
+
+    release_date = page.query_selector(SPOTIFY_RELEASE_DATE_SELECTOR).inner_text()
+
+    if release_date:
+      logger.info(f"✅ Track release date extracted: {release_date}\n")
+      
+      return release_date
+
+  except Exception:
+    logger.error("❌ Failed to extract Spotify track release date\n")
+    return None
 
 # Update a Spotify track data
 def spotify_scrap_more_track_data(page, track_link, album_link):
@@ -88,6 +105,9 @@ def spotify_scrap_more_track_data(page, track_link, album_link):
     # Get track count
     track_play_count = spotify_extract_play_count(page)
 
+    # Get release date
+    release_date = spotify_extract_release_date(page)
+    
     # Get track image src
     track_img_src = page.query_selector(f'xpath={SPOTIFY_TRACK_IMAGE_XPATH}').get_attribute('src')
 
@@ -98,7 +118,8 @@ def spotify_scrap_more_track_data(page, track_link, album_link):
       'track_embed': track_embed,
       'track_iframe': track_iframe,
       'album_embed': album_embed,
-      'album_iframe': album_iframe
+      'album_iframe': album_iframe,
+      'track_year': release_date
     }
     
     logger.info("✅ Track data updated\n")

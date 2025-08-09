@@ -5,7 +5,7 @@ from datetime import datetime
 # =======================
 # Collection URLS
 # =======================
-URL_APPLE_PLAYLIST = "https://music.apple.com/fr/playlist/jul-les-indispensables/pl.ce24519562f44ed8b85e238070db34fc"
+URL_APPLE_PLAYLIST = "https://music.apple.com/fr/playlist/the-weeknd-les-indispensables/pl.659f6a1cac0f4232ad19d1a2cfdc9fb8"
 URL_APPLE_ALBUM = "https://music.apple.com/fr/album/favourite-worst-nightmare/251126923"
 URL_APPLE_ALBUM_DISCS = "https://music.apple.com/fr/album/ta13oo/1408388537"
 URL_DEEZER_PLAYLIST = "https://www.deezer.com/en/playlist/10071848282"
@@ -91,6 +91,7 @@ SPOTIFY_ALBUM_COLUMN_SELECTOR  = 'div[aria-colindex="3"]'  # Album data column
 SPOTIFY_SCROLL_CONTAINER = '[data-overlayscrollbars-viewport]'  # Scrolling container
 
 # Deezer
+BASE_DEEZER_URL = "https://www.deezer.com"
 DEEZER_INFORMATIONS_SELECTOR = '[data-testid="masthead"]'  # Selector for header information
 DEEZER_TITLE_SELECTOR = 'h2'  # <h2> -> title
 DEEZER_TOTAL_TRACKS_XPATH = '(//ul)[2]//li'  # Second <ul> and first <li>

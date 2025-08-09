@@ -22,23 +22,33 @@ def apple_extract_album_tracks(page, tracks, _):
   # Album informations
   album_name = page.query_selector(APPLE_TITLE_SELECTOR).text_content()
   album_artists_element = page.query_selector(APPLE_SUBTITLE_SELECTOR)
-  album_artists_name = [a.text_content() for a in album_artists_element.query_selector_all('a')]
+  album_artist_name = album_artists_element.query_selector("a").text_content()
+  album_artist_link = album_artists_element.query_selector("a").get_attribute("href")
   album_link = page.url
 
   for page_track in page_tracks:
     try:
       track_element = page_track.query_selector(APPLE_TRACK_COLUMN_SELECTOR)
-      track_link = track_element.query_selector('a')
-      track_name = track_element.query_selector('div')
+      track_element_links = track_element.query_selector_all('a')
+      track_link = track_element_links[0].get_attribute("href")
+      track_name = track_element_links[0].text_content()
+      artists = tuple([album_artist_name])
+      artists_links = tuple([album_artist_link])
+
+      if len(track_element_links) > 1:
+        track_element_links.pop(0)
+        artists = tuple(artist.text_content() for artist in track_element_links)
+        artists_links = tuple(artist.get_attribute("href") for artist in track_element_links)
 
       track_info = (
         album_name,  # Album name
         album_link,  # Album link
-        tuple(artist for artist in album_artists_name if artist.strip()),  # Artists (as tuple)
-        track_name.text_content(),  # Track name
-        track_link.get_attribute('href'),  # Track link
+        artists,  # Artists names as tuple
+        artists_links,  # Artists links as tuple
+        track_name,  # Track name
+        track_link,  # Track link
       )
-
+     
       # Add only if not already in the set
       if track_info not in existing_tracks:
         tracks.append(track_info)
@@ -46,7 +56,7 @@ def apple_extract_album_tracks(page, tracks, _):
 
     except Exception:
       pass
-
+  
   return tracks
 
 
@@ -69,11 +79,13 @@ def apple_extract_playlist_tracks(page, tracks, _):
       if not (album and artists and track_link and track_name):
         continue  
 
+
       # Extract track informations
       track_info = (
         album.text_content(),  # Album name
         album.get_attribute('href'),  # Album link
         tuple(artist.text_content().strip() for artist in artists if artist.text_content().strip()),  # Artists (as tuple)
+        tuple(artist.query_selector("a").get_attribute("href") for artist in artists if artist.query_selector("a")),  # Artists links (as tuple)
         track_name.text_content(),  # Track name
         track_link.get_attribute('href'),  # Track link
       )

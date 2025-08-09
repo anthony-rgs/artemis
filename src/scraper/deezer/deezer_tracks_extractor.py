@@ -1,5 +1,5 @@
 import re
-from src.config import DEEZER_TRACKLIST_ROW_SELECTOR, DEEZER_INFORMATIONS_SELECTOR, DEEZER_TITLE_SELECTOR, DEEZER_ALBUM_ARTIST_NAME_SELECTOR, DEEZER_TRACKLIST_ROW_TRACK_SELECTOR, DEEZER_TRACKLIST_ROW_TRACK_SELECTOR, DEEZER_PLAYLIST_ALBUM_SELECTOR, DEEZER_TRACKLIST_ROW_ARTIST_SELECTOR
+from src.config import BASE_DEEZER_URL ,DEEZER_TRACKLIST_ROW_SELECTOR, DEEZER_INFORMATIONS_SELECTOR, DEEZER_TITLE_SELECTOR, DEEZER_ALBUM_ARTIST_NAME_SELECTOR, DEEZER_TRACKLIST_ROW_TRACK_SELECTOR, DEEZER_TRACKLIST_ROW_TRACK_SELECTOR, DEEZER_PLAYLIST_ALBUM_SELECTOR, DEEZER_TRACKLIST_ROW_ARTIST_SELECTOR
 
 # Clean Deezer page tracks 
 def get_clean_page_tracks(page, tracks):
@@ -23,6 +23,7 @@ def deezer_extract_album_tracks(page, tracks, _):
   top_container_informations = page.query_selector(DEEZER_INFORMATIONS_SELECTOR)
   album_name = top_container_informations.query_selector(DEEZER_TITLE_SELECTOR).text_content()
   album_artist_name = page.query_selector(DEEZER_ALBUM_ARTIST_NAME_SELECTOR).text_content()
+  album_artist_link = page.query_selector(DEEZER_ALBUM_ARTIST_NAME_SELECTOR).get_attribute("href")
   album_link = page.url
   
   # Remove the default wait time for Playwright
@@ -33,6 +34,7 @@ def deezer_extract_album_tracks(page, tracks, _):
     try:
       # Deezer doesn't include the album artist in the track row
       artists = [album_artist_name] # Start array with album artist name
+      artists_links = [BASE_DEEZER_URL + album_artist_link] # Start array with album artist link
 
       first_div = page_track.query_selector("div")
     
@@ -51,12 +53,14 @@ def deezer_extract_album_tracks(page, tracks, _):
       if featured_artists:
         for featured_artist in featured_artists:
           artists.append(featured_artist.text_content())
+          artists_links.append(BASE_DEEZER_URL + featured_artist.get_attribute("href"))
       
       # Extract track informations
       track_info = (
         album_name,  # Album name
         album_link,  # Album link
-        tuple(artist for artist in artists if artist.strip()),  # Artists (as tuple)
+        tuple(artist for artist in artists if artist.strip()),  # Artists names (as tuple)
+        tuple(artist for artist in artists_links if artist.strip()),  # Artists links (as tuple)
         track_name_cleaned,  # Track name
         "",  # No track link...
       )
@@ -92,8 +96,9 @@ def deezer_extract_playlist_tracks(page, tracks, _):
       # Extract track informations
       track_info = (
         album.text_content(),  # Album name
-        album.get_attribute('href'),  # Album link
-        tuple(artist.text_content() for artist in artists if artist.text_content().strip()),  # Artists (as tuple)
+        BASE_DEEZER_URL + album.get_attribute('href'),  # Album link
+        tuple(artist.text_content() for artist in artists if artist.text_content().strip()),  # Artists names (as tuple)
+        tuple(BASE_DEEZER_URL + artist.get_attribute('href') for artist in artists if artist.get_attribute('href')),  # Artists links (as tuple)
         track_name.text_content(),  # Track name
         "",  # No track link...
       )

@@ -20,11 +20,12 @@ def create_json_file(tracks, link, name, platform, content_type):
     {
       "track_name": track_name, 
       "artists": artists, 
+      "artists_links": artists_links, 
       "album": album, 
       "album_link": album_link, 
       "track_link": track_link,
     } 
-    for album, album_link, artists, track_name, track_link in tracks
+    for album, album_link, artists, artists_links, track_name, track_link in tracks
   ]
 
   data = {

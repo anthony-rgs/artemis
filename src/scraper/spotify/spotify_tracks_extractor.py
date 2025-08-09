@@ -45,6 +45,7 @@ def spotify_extract_album_tracks(page, tracks, total_tracks):
         album_name,  # Album name
         album_link,  # Album link
         tuple(link.text_content().strip() for link in track_links[1:] if link.text_content().strip()),  # Artists (as tuple)
+        tuple(BASE_SPOTIFY_URL + link.get_attribute("href") for link in track_links[1:] if link.get_attribute("href")),  # Artists links (as tuple)
         track_links[0].text_content(),  # Track name
         BASE_SPOTIFY_URL + track_links[0].get_attribute("href"),  # Track link
       )
@@ -82,7 +83,8 @@ def spotify_extract_playlist_tracks(page, tracks, total_tracks):
       track_info = (
         album_links[0].inner_text(),  # Album name
         BASE_SPOTIFY_URL + album_links[0].get_attribute("href"),  # Album link
-        tuple(link.inner_text() for link in track_links[1:] if link.inner_text().strip()),  # Artists (as tuple)
+        tuple(link.inner_text() for link in track_links[1:] if link.inner_text().strip()),  # Artists names (as tuple)
+        tuple(BASE_SPOTIFY_URL + link.get_attribute("href") for link in track_links[1:] if link.get_attribute("href")),  # Artists links (as tuple)
         track_links[0].inner_text(),  # Track name
         BASE_SPOTIFY_URL + track_links[0].get_attribute("href"),  # Track link
       )

@@ -1,5 +1,5 @@
 import re
-from src.config import BASE_DEEZER_URL ,DEEZER_TRACKLIST_ROW_SELECTOR, DEEZER_INFORMATIONS_SELECTOR, DEEZER_TITLE_SELECTOR, DEEZER_ALBUM_ARTIST_NAME_SELECTOR, DEEZER_TRACKLIST_ROW_TRACK_SELECTOR, DEEZER_TRACKLIST_ROW_TRACK_SELECTOR, DEEZER_PLAYLIST_ALBUM_SELECTOR, DEEZER_TRACKLIST_ROW_ARTIST_SELECTOR
+from src.config import BASE_DEEZER_URL, DEEZER_DURATION_TRACK_SELECTOR, DEEZER_TRACKLIST_ROW_SELECTOR, DEEZER_INFORMATIONS_SELECTOR, DEEZER_TITLE_SELECTOR, DEEZER_ALBUM_ARTIST_NAME_SELECTOR, DEEZER_TRACKLIST_ROW_TRACK_SELECTOR, DEEZER_TRACKLIST_ROW_TRACK_SELECTOR, DEEZER_PLAYLIST_ALBUM_SELECTOR, DEEZER_TRACKLIST_ROW_ARTIST_SELECTOR
 
 # Clean Deezer page tracks 
 def get_clean_page_tracks(page, tracks):
@@ -47,6 +47,8 @@ def deezer_extract_album_tracks(page, tracks, _):
       track_name_text = track_name_element.text_content()
       track_name_cleaned = re.sub(r"^\d+\.\s*", "", track_name_text)
 
+      track_time = page_track.query_selector(DEEZER_DURATION_TRACK_SELECTOR).text_content()
+
       # Get featured artists
       featured_artists = first_div.query_selector_all(DEEZER_TRACKLIST_ROW_ARTIST_SELECTOR)
 
@@ -63,6 +65,7 @@ def deezer_extract_album_tracks(page, tracks, _):
         tuple(artist for artist in artists_links if artist.strip()),  # Artists links (as tuple)
         track_name_cleaned,  # Track name
         "",  # No track link...
+        track_time,  # Track time
       )
 
       # Add only if not already in the set
@@ -88,6 +91,7 @@ def deezer_extract_playlist_tracks(page, tracks, _):
       artists = first_div.query_selector_all(DEEZER_TRACKLIST_ROW_ARTIST_SELECTOR)
       album = first_div.query_selector(DEEZER_PLAYLIST_ALBUM_SELECTOR)
       track_name = first_div.query_selector(DEEZER_TRACKLIST_ROW_TRACK_SELECTOR)
+      track_time = page_track.query_selector(DEEZER_DURATION_TRACK_SELECTOR).text_content()
       
       # Check if there are data
       if not (album and artists and track_name):
@@ -101,6 +105,7 @@ def deezer_extract_playlist_tracks(page, tracks, _):
         tuple(BASE_DEEZER_URL + artist.get_attribute('href') for artist in artists if artist.get_attribute('href')),  # Artists links (as tuple)
         track_name.text_content(),  # Track name
         "",  # No track link...
+        track_time  # Track time
       )
 
       # Add only if not already in the set

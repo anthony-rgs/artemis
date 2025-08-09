@@ -1,4 +1,4 @@
-from src.config import BASE_SPOTIFY_URL, SPOTIFY_TRACKLIST_ROW_SELECTOR, SPOTIFY_TRACK_COLUMN_SELECTOR, SPOTIFY_ALBUM_COLUMN_SELECTOR, SPOTIFY_TITLE_SELECTOR
+from src.config import BASE_SPOTIFY_URL, SPOTIFY_TIME_COLUMN_PLAYLIST_SELECTOR, SPOTIFY_TIME_COLUMN_ALBUM_SELECTOR, SPOTIFY_TRACKLIST_ROW_SELECTOR, SPOTIFY_TRACK_COLUMN_SELECTOR, SPOTIFY_ALBUM_COLUMN_SELECTOR, SPOTIFY_TITLE_SELECTOR
 from src.utils.logger import logger
 
 
@@ -36,6 +36,8 @@ def spotify_extract_album_tracks(page, tracks, total_tracks):
       track_element = page_track.query_selector(SPOTIFY_TRACK_COLUMN_SELECTOR)
       track_links = track_element.query_selector_all("a")
       
+      track_time = page_track.query_selector(SPOTIFY_TIME_COLUMN_ALBUM_SELECTOR).inner_text()
+      
       # Check if there are data
       if not track_links:
         continue  
@@ -48,6 +50,7 @@ def spotify_extract_album_tracks(page, tracks, total_tracks):
         tuple(BASE_SPOTIFY_URL + link.get_attribute("href") for link in track_links[1:] if link.get_attribute("href")),  # Artists links (as tuple)
         track_links[0].text_content(),  # Track name
         BASE_SPOTIFY_URL + track_links[0].get_attribute("href"),  # Track link
+        track_time,  # Track time
       )
 
       # Add only if not already in the set
@@ -74,6 +77,7 @@ def spotify_extract_playlist_tracks(page, tracks, total_tracks):
       }
       album_links = elements["album"].query_selector_all('a')
       track_links = elements["track"].query_selector_all('a')
+      track_time = page_track.query_selector(SPOTIFY_TIME_COLUMN_PLAYLIST_SELECTOR).inner_text()
 
       # Check if there are data
       if not (track_links and album_links):
@@ -87,6 +91,7 @@ def spotify_extract_playlist_tracks(page, tracks, total_tracks):
         tuple(BASE_SPOTIFY_URL + link.get_attribute("href") for link in track_links[1:] if link.get_attribute("href")),  # Artists links (as tuple)
         track_links[0].inner_text(),  # Track name
         BASE_SPOTIFY_URL + track_links[0].get_attribute("href"),  # Track link
+        track_time  # Track time
       )
 
       # Add only if not already in the set

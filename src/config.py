@@ -72,6 +72,7 @@ APPLE_TITLE_SELECTOR = '[data-testid="non-editable-product-title"]'  # Title pag
 APPLE_SUBTITLE_SELECTOR = '[data-testid="product-subtitles"]'  # Subtitle page
 APPLE_TRACKLIST_ROW_SELECTOR = '[data-testid="track-list-item"]'  # Selector for tracklist row
 APPLE_TRACK_COLUMN_SELECTOR = '[data-testid="song-name-wrapper"]'  # Track column selector
+APPLE_TRACK_DURATION_SELECTOR ='[data-testid="track-duration"]'  # Track duration
 APPLE_ARTIST_COLUMN_SELECTOR = '[data-testid="track-column-secondary"]'  # Artist column selector
 APPLE_ALBUM_COLUMN_SELECTOR = '[data-testid="track-column-tertiary"]'  # Album column selector
 APPLE_SCROLL_CONTAINER = '[data-testid="main-section"]'  # Scroll container
@@ -85,9 +86,12 @@ SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH = "//main/section/div[1]/div[2]/div[2]/div[1]/d
 SPOTIFY_TRACK_IMAGE_XPATH = "//main/section/div[1]//img[1]"  # Track page -> Xpath from main to track image
 SPOTIFY_PLAYLIST_TOTAL_TRACKS_ATTR = "aria-rowcount"  # PLAYLIST -> Attribute to fetch the total number of tracks
 SPOTIFY_PLAY_COUNT_SELECTOR = '[data-testid="playcount"]'  # Selector for play count
+SPOTIFY_RELEASE_DATE_SELECTOR = '[data-testid="release-date"]'  # Selector for release date
 SPOTIFY_TRACKLIST_ROW_SELECTOR = '[data-testid="tracklist-row"]'  # Selector for tracklist row
 SPOTIFY_TRACK_COLUMN_SELECTOR  = 'div[aria-colindex="2"]'  # Track data column
 SPOTIFY_ALBUM_COLUMN_SELECTOR  = 'div[aria-colindex="3"]'  # Album data column
+SPOTIFY_TIME_COLUMN_ALBUM_SELECTOR  = 'div[aria-colindex="3"]'  # Time data column for album page
+SPOTIFY_TIME_COLUMN_PLAYLIST_SELECTOR  = 'div[aria-colindex="5"]'  # Time data column for playlist page
 SPOTIFY_SCROLL_CONTAINER = '[data-overlayscrollbars-viewport]'  # Scrolling container
 
 # Deezer
@@ -98,6 +102,7 @@ DEEZER_TOTAL_TRACKS_XPATH = '(//ul)[2]//li'  # Second <ul> and first <li>
 DEEZER_TRACKLIST_ROW_SELECTOR = 'div[draggable][aria-rowindex]'  # Selector for the div row with "draggable" and "aria-rowindex" -> Tracklist row
 DEEZER_TRACKLIST_ROW_ARTIST_SELECTOR = '[data-testid="artist"]'  # Selector for artist name in a tracklist row
 DEEZER_TRACKLIST_ROW_TRACK_SELECTOR = '[data-testid="title"]'  # Selector for the track name in a tracklist row
+DEEZER_DURATION_TRACK_SELECTOR = '[data-testid="duration"]'  # Selector for track duration
 DEEZER_ALBUM_ARTIST_NAME_SELECTOR = '[data-testid="creator-name"]'  # Selector for the artist's name of the album 
 DEEZER_PLAYLIST_ALBUM_SELECTOR = '[data-testid="album"]'  # Selector for the artist's name of the album -> for the album page
 DEEZER_SCROLL_CONTAINER = 'body'  # Scrolling container

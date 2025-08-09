@@ -1,4 +1,4 @@
-from src.config import APPLE_TRACKLIST_ROW_SELECTOR, APPLE_TITLE_SELECTOR, APPLE_SUBTITLE_SELECTOR, APPLE_TRACK_COLUMN_SELECTOR, APPLE_ARTIST_COLUMN_SELECTOR, APPLE_ALBUM_COLUMN_SELECTOR
+from src.config import APPLE_TRACKLIST_ROW_SELECTOR, APPLE_TRACK_DURATION_SELECTOR, APPLE_TITLE_SELECTOR, APPLE_SUBTITLE_SELECTOR, APPLE_TRACK_COLUMN_SELECTOR, APPLE_ARTIST_COLUMN_SELECTOR, APPLE_ALBUM_COLUMN_SELECTOR
 
 
 # Clean Apple page tracks 
@@ -34,6 +34,7 @@ def apple_extract_album_tracks(page, tracks, _):
       track_name = track_element_links[0].text_content()
       artists = tuple([album_artist_name])
       artists_links = tuple([album_artist_link])
+      track_time = page_track.query_selector(APPLE_TRACK_DURATION_SELECTOR).inner_text()
 
       if len(track_element_links) > 1:
         track_element_links.pop(0)
@@ -47,6 +48,7 @@ def apple_extract_album_tracks(page, tracks, _):
         artists_links,  # Artists links as tuple
         track_name,  # Track name
         track_link,  # Track link
+        track_time  # Track time
       )
      
       # Add only if not already in the set
@@ -74,6 +76,7 @@ def apple_extract_playlist_tracks(page, tracks, _):
       track_element = page_track.query_selector(APPLE_TRACK_COLUMN_SELECTOR)
       track_link = track_element.query_selector('a')
       track_name = track_element.query_selector('div')
+      track_time = page_track.query_selector(APPLE_TRACK_DURATION_SELECTOR)
       
       # Check if there are data
       if not (album and artists and track_link and track_name):
@@ -88,6 +91,7 @@ def apple_extract_playlist_tracks(page, tracks, _):
         tuple(artist.query_selector("a").get_attribute("href") for artist in artists if artist.query_selector("a")),  # Artists links (as tuple)
         track_name.text_content(),  # Track name
         track_link.get_attribute('href'),  # Track link
+        track_time.inner_text()  # Track time
       )
 
       # Add only if not already in the set

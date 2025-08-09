@@ -52,8 +52,8 @@ Artemis retrieves information from any **playlist or album** on these platforms.
 
 ## 2. Project Dependencies
 
-- **selenium==4.10.0** → Browser automation
-- **webdriver-manager==4.0.1** → Automatic driver management for Selenium
+- **playwright==1.38.0** → Browser automation
+- **requests** → HTTP requests handling
 
 <br>
 
@@ -63,6 +63,7 @@ Run the following command to install all dependencies:
 
 ```sh
 pip install -r requirements.txt
+python3 -m playwright install
 ```
 
 <br>
@@ -113,9 +114,9 @@ The generated JSON file looks like this:
       "play_count": 2113222338,
       "track_img": "https://i.scdn.co/image/ab67616d00001e020c8ac83035e9588e8ad34b90",
       "track_embed": "https://open.spotify.com/embed/track/58ge6dfP91o9oXMzq3XkIS?theme=0",
-      "track_iframe": "<iframe style='border-radius:12px' src='https://open.spotify.com/embed/track/58ge6dfP91o9oXMzq3XkIS?theme=0' width='100%' height='152' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe>",
+      "track_iframe": "<iframe style='border-radius:12px' src='https://open.spotify.com/embed/track/58ge6dfP91o9oXMzq3XkIS?theme=0' width='100%' height='110' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe>",
       "album_embed": "https://open.spotify.com/embed/album/6rsQnwaoJHxXJRCDBPkBRw?theme=0",
-      "album_iframe": "<iframe style='border-radius:12px' src='https://open.spotify.com/embed/track/58ge6dfP91o9oXMzq3XkIS?theme=0' width='100%' height='152' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe>"
+      "album_iframe": "<iframe style='border-radius:12px' src='https://open.spotify.com/embed/track/58ge6dfP91o9oXMzq3XkIS?theme=0' width='100%' height='110' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe>"
     },
     "..."
   ]

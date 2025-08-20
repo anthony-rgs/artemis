@@ -52,8 +52,11 @@ COLLECTIONS_APPLE_FOLDER = os.path.join(COLLECTIONS_FOLDER, "apple")
 COLLECTIONS_DEEZER_FOLDER = os.path.join(COLLECTIONS_FOLDER, "deezer")
 COLLECTIONS_SPOTIFY_FOLDER = os.path.join(COLLECTIONS_FOLDER, "spotify")
 COLLECTIONS_SPOTIFY_BILLION_CLUB_FOLDER = os.path.join(COLLECTIONS_FOLDER, "billion-club")
+COLLECTIONS_SPOTIFY_BILLION_CLUB_ARTISTS_FOLDER = os.path.join(COLLECTIONS_SPOTIFY_BILLION_CLUB_FOLDER, "artists")
+COLLECTIONS_SPOTIFY_BILLION_CLUB_TRACKS_FOLDER = os.path.join(COLLECTIONS_SPOTIFY_BILLION_CLUB_FOLDER, "tracks")
+COLLECTIONS_SPOTIFY_BILLION_CLUB_ALBUMS_FOLDER = os.path.join(COLLECTIONS_SPOTIFY_BILLION_CLUB_FOLDER, "albums")
 # Create folders if they doesn't exist
-for folder in [COLLECTIONS_FOLDER, COLLECTIONS_APPLE_FOLDER, COLLECTIONS_DEEZER_FOLDER, COLLECTIONS_SPOTIFY_FOLDER, COLLECTIONS_SPOTIFY_BILLION_CLUB_FOLDER]:
+for folder in [COLLECTIONS_FOLDER, COLLECTIONS_APPLE_FOLDER, COLLECTIONS_DEEZER_FOLDER, COLLECTIONS_SPOTIFY_FOLDER, COLLECTIONS_SPOTIFY_BILLION_CLUB_FOLDER, COLLECTIONS_SPOTIFY_BILLION_CLUB_ARTISTS_FOLDER, COLLECTIONS_SPOTIFY_BILLION_CLUB_TRACKS_FOLDER, COLLECTIONS_SPOTIFY_BILLION_CLUB_ALBUMS_FOLDER]:
   os.makedirs(folder, exist_ok=True)
 
 
@@ -81,6 +84,8 @@ APPLE_TRACKS_CONTAINER = '[data-testid="tracklist"]'  # Tracks container
 # Spotify
 BASE_SPOTIFY_URL = "https://open.spotify.com"
 SPOTIFY_BILLION_CLUB_URL = "https://open.spotify.com/playlist/37i9dQZF1DX7iB3RCnBnN4"
+SPOTIFY_PLAYLIST_IMAGE_SELECTOR = '[data-testid="playlist-image"]'  # Selctor for spotify playlist url
+SPOTIFY_PLAYLIST_IMAGE_ARTIST_TEXT = "All the songs with over 1 billion streams on Spotify. Cover:"  # Phrase to find the name of the artist on the playlist cover
 SPOTIFY_TITLE_SELECTOR = '[data-testid="entityTitle"]'  # Selector for title
 SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH = "//main/section/div[1]/div[2]/div[2]/div[1]/div[2]/span"  # ALBUM -> Xpath from main to total tacks span
 SPOTIFY_TRACK_IMAGE_XPATH = "//main/section/div[1]//img[1]"  # Track page -> Xpath from main to track image

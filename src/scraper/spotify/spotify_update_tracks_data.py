@@ -1,32 +1,44 @@
 import time
 
-from src.config import COLLECTIONS_SPOTIFY_BILLION_CLUB_FOLDER
+from src.config import COLLECTIONS_SPOTIFY_BILLION_CLUB_TRACKS_FOLDER, SPOTIFY_BILLION_CLUB_URL
 
 from src.utils.retry import retry_function
 from src.utils.logger import logger 
 from src.utils.json_handler import get_latest_json_file, load_json_from_file, update_json_file, move_json_file
 
 from src.scraper.playwright import launch_playwright, close_playwright, create_context_and_page, close_context_and_page
-from src.scraper.spotify.spotify_parser import spotify_scrap_more_track_data
+from src.scraper.spotify.spotify_parser import spotify_extrack_playlist_cover, spotify_scrap_more_track_data
 
 
 # Update Spotify tracks data from a JSON file
-def spotify_update_tracks_data(collection_json):
+def spotify_update_tracks_data(collection_json, kill_script = True):
   # Start script timer
   start_updating_tracks = time.perf_counter()
 
   # Move last JSON file
   if collection_json:
     file_source = collection_json
-    file_destination = COLLECTIONS_SPOTIFY_BILLION_CLUB_FOLDER
+    file_destination = COLLECTIONS_SPOTIFY_BILLION_CLUB_TRACKS_FOLDER
     move_json_file(file_source, file_destination)
 
   # Get last JSON file path
-  folder = f"{COLLECTIONS_SPOTIFY_BILLION_CLUB_FOLDER}/"
+  folder = f"{COLLECTIONS_SPOTIFY_BILLION_CLUB_TRACKS_FOLDER}/"
   json_file_path = get_latest_json_file(folder)
 
   # Init playwright
   page, browser, playwright = retry_function(launch_playwright)
+
+  # Scrap more Spotify playlist data
+  context, page = create_context_and_page(browser)
+  page.goto(SPOTIFY_BILLION_CLUB_URL)
+  cover_img, cover_artist = spotify_extrack_playlist_cover(page)
+  close_context_and_page(context, page)
+
+  # Save new Spotify playlist data in json
+  json_file = load_json_from_file(json_file_path)
+  json_file['cover_img'] = cover_img
+  json_file['cover_artist'] = cover_artist
+  update_json_file(json_file_path, json_file)
   
   if page: 
     logger.info("🚀 Fetching new tracks data...")
@@ -51,7 +63,7 @@ def spotify_update_tracks_data(collection_json):
         logger.disabled = True  # Disable logger
 
         track = tracks_without_play_count[0] # Select the first track
-        track_link =  track["track_link"]
+        track_link = track["track_link"]
         album_link = track["album_link"]
 
         # Create new context and page
@@ -83,4 +95,4 @@ def spotify_update_tracks_data(collection_json):
 
     logger.info(f"🎉 You rock, Artémis !\n")
 
-    close_playwright(page, browser, playwright)
+    close_playwright(page, browser, playwright, kill_script)

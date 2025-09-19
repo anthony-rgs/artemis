@@ -16,7 +16,7 @@ def get_deezer_scroll_container(page):
       cookie_button = page.query_selector(f"#{DEEZER_CLOSE_COOKIE_ID}")
 
       if cookie_button:
-        time.sleep(1)
+        time.sleep(2)
         cookie_button.click()
         logger.info("🍪 Cookie modal closed successfully.")
         time.sleep(1)

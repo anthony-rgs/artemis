@@ -19,7 +19,6 @@ URL_SPOTIFY_ALBUM_DISCS = "https://open.spotify.com/album/6idVoBWP2mt1qoMtASm3gc
 # =======================
 # Logging Configuration
 # =======================
-
 LOG_FOLDER = "logs/"  # Folder where log files are saved
 os.makedirs(LOG_FOLDER, exist_ok=True)  # Create folder if it doesn't exist
 
@@ -30,7 +29,6 @@ SAVE_LOG = False  # Enables/disables logging to a file
 # =======================
 # Playwright Configuration
 # =======================
-
 PLAYWRIGHT_OPTIONS = {
   "headless": True,  # Run browser in headless mode (no UI)
   "disable_gpu": True,  # Disable GPU acceleration (fixes issues in headless mode)
@@ -46,7 +44,6 @@ PLAYWRIGHT_TIMEOUT = 10  # Explicit wait timeout (seconds)
 # =======================
 # Paths & File Handling
 # =======================
-
 COLLECTIONS_FOLDER = "collections"  # Folder where collections JSON files are saved
 COLLECTIONS_APPLE_FOLDER = os.path.join(COLLECTIONS_FOLDER, "apple")
 COLLECTIONS_DEEZER_FOLDER = os.path.join(COLLECTIONS_FOLDER, "deezer")
@@ -63,7 +60,6 @@ for folder in [COLLECTIONS_FOLDER, COLLECTIONS_APPLE_FOLDER, COLLECTIONS_DEEZER_
 # =======================
 # Scraping Configuration
 # =======================
-
 SCROLL_ITERATIONS = 20  # 1 scroll iteration corresponds to one visible line on the page (Don't set it too high, take it slow with Deezer)
 CUSTOM_OVERLAY_ID="artemis-custom-overlay"
 
@@ -84,7 +80,7 @@ APPLE_TRACKS_CONTAINER = '[data-testid="tracklist"]'  # Tracks container
 # Spotify
 BASE_SPOTIFY_URL = "https://open.spotify.com"
 SPOTIFY_BILLION_CLUB_URL = "https://open.spotify.com/playlist/37i9dQZF1DX7iB3RCnBnN4"
-SPOTIFY_PLAYLIST_IMAGE_SELECTOR = '[data-testid="playlist-image"]'  # Selctor for spotify playlist url
+SPOTIFY_PLAYLIST_IMAGE_SELECTOR = '[data-testid="playlist-image"]'  # Selector for spotify playlist url
 SPOTIFY_PLAYLIST_IMAGE_ARTIST_TEXT = "All the songs with over 1 billion streams on Spotify. Cover:"  # Phrase to find the name of the artist on the playlist cover
 SPOTIFY_TITLE_SELECTOR = '[data-testid="entityTitle"]'  # Selector for title
 SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH = "//main/section/div[1]/div[2]/div[2]/div[1]/div[2]/span"  # ALBUM -> Xpath from main to total tacks span
@@ -117,6 +113,5 @@ DEEZER_CLOSE_COOKIE_ID = "gdpr-btn-refuse-all"  # Id of the cookie button
 # =======================
 # Error Handling & Retries
 # =======================
-
 MAX_RETRIES = 3  # Maximum number of function retries before failing
 RETRY_WAIT_TIME = 3  # Wait time (seconds) before retrying a failed function

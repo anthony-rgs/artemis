@@ -6,8 +6,10 @@ from src.config import SPOTIFY_BILLION_CLUB_URL
 from src.utils.logger import logger 
 
 from src.scraper.collection_handler import scrape_collection
+from src.scraper.spotify.spotify_get_artists import spotify_get_artists
+from src.scraper.spotify.spotify_get_albums import spotify_get_albums
+from src.scraper.spotify.spotify_update_artists_data import spotify_update_artists_data
 from src.scraper.spotify.spotify_update_tracks_data import spotify_update_tracks_data
-
 
 # Billion club script
 def billion_club():
@@ -15,8 +17,7 @@ def billion_club():
   start_billion_club_script = time.perf_counter()
 
   # Variables
-  # url = SPOTIFY_BILLION_CLUB_URL
-  url = "https://open.spotify.com/playlist/1ld25V4O1QIDzdkoOXVaeK" # to delete
+  url = SPOTIFY_BILLION_CLUB_URL
   collection_json = False
 
   logger.info("💎 Billion club script running...\n")
@@ -31,7 +32,26 @@ def billion_club():
   logger.info("#######################################")
   logger.info("###       UPDATE SPOTIFY DATA       ###")
   logger.info("#######################################\n")
-  spotify_update_tracks_data(collection_json)
+  spotify_update_tracks_data(collection_json, kill_script = False)
+
+  # Scrape Billion club artists
+  logger.info("#######################################")
+  logger.info("###       SCRAPE ARTISTS DATA       ###")
+  logger.info("#######################################\n")
+  spotify_get_artists()
+
+  # Update Billion club artists data
+  logger.info("#######################################")
+  logger.info("###       UPDATE ARTISTS DATA       ###")
+  logger.info("#######################################\n")
+  spotify_update_artists_data(kill_script = False)
+  
+  # Scrape Billion club albums data
+  logger.info("#######################################")
+  logger.info("###           GET ALBUMS           ###")
+  logger.info("#######################################\n")
+  spotify_get_albums()
+
 
   # End Timer
   end_billion_club_script = time.perf_counter()
@@ -39,7 +59,7 @@ def billion_club():
   logger.info(f'⏰ Billion club script completed in {billion_club_elapsed:.2f} seconds\n')
 
   # Kill script
-  sys.exit(1)
+  sys.exit(0)
 
 
 billion_club()

@@ -92,9 +92,17 @@ This script tests the **three types of URLs** possible for each platform (**Spot
 - **Album**
 - **Album with multiple discs**
 
-### - `billion_club.py` (Bonus)
+### - `/billionClubScripts` (Bonus)
 
-Spotify has a playlist containing all tracks with **over 1 billion streams**. This script retrieves all tracks and then accesses each track page to extract the **exact play count** as well as additional track details such as album information, track image, and embed links.
+Spotify has a playlist containing all tracks with **over 1 billion streams**. This folder contains several scripts that can be used to retrieve all this information:
+
+- the **playlist**
+- information about each **song**
+- information about each **artist**
+- information about each **album**
+
+To avoid being timed out by Spotify, you have to create and destroy the browser for each URL.
+The total scraping process takes about 2 hours for 1,000 songs (yes, it's really long...).
 
 The generated JSON file looks like this:
 
@@ -104,6 +112,8 @@ The generated JSON file looks like this:
   "name": "billions-club",
   "length": 901,
   "link": "https://open.spotify.com/playlist/37i9dQZF1DX7iB3RCnBnN4",
+  "cover_img": "https://i.scdn.co/image/ab67706f000000021fabab2224e7195926f6281e",
+  "cover_artist": "Alex Warren",
   "tracks": [
     {
       "track_name": "505",
@@ -116,7 +126,9 @@ The generated JSON file looks like this:
       "track_embed": "https://open.spotify.com/embed/track/58ge6dfP91o9oXMzq3XkIS?theme=0",
       "track_iframe": "<iframe style='border-radius:12px' src='https://open.spotify.com/embed/track/58ge6dfP91o9oXMzq3XkIS?theme=0' width='100%' height='110' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe>",
       "album_embed": "https://open.spotify.com/embed/album/6rsQnwaoJHxXJRCDBPkBRw?theme=0",
-      "album_iframe": "<iframe style='border-radius:12px' src='https://open.spotify.com/embed/track/58ge6dfP91o9oXMzq3XkIS?theme=0' width='100%' height='110' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe>"
+      "album_iframe": "<iframe style='border-radius:12px' src='https://open.spotify.com/embed/track/58ge6dfP91o9oXMzq3XkIS?theme=0' width='100%' height='110' frameBorder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe>",
+      "track_year": "2007",
+      "track_time": "4:13"
     },
     "..."
   ]

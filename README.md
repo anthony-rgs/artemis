@@ -134,3 +134,10 @@ The generated JSON file looks like this:
   ]
 }
 ```
+
+<br>
+
+## 6. Part of the Olympe Stack
+
+This repository is a component of **[Olympe](https://github.com/anthony-rgs/olympe)**, a modular stack for collecting and visualizing Spotify “Billions Club” data. **Artemis** handles data collection and writes datasets to /collections, which are then processed by Heraclès and visualized in **[Elysium](https://github.com/anthony-rgs/elysium)**. \
+It can run standalone or as part of the **[Olympe](https://github.com/anthony-rgs/olympe)** Docker Compose setup.

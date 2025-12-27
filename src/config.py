@@ -30,7 +30,7 @@ SAVE_LOG = False  # Enables/disables logging to a file
 # Playwright Configuration
 # =======================
 PLAYWRIGHT_OPTIONS = {
-  "headless": True,  # Run browser in headless mode (no UI)
+  "headless": False,  # Run browser in headless mode (no UI)
   "disable_gpu": True,  # Disable GPU acceleration (fixes issues in headless mode)
   "no_sandbox": True,  # Required for running in some environments (e.g., Linux servers)
   "disable_dev_shm_usage": True,  # To prevent memory issues on Docker/Linux.
@@ -81,7 +81,7 @@ APPLE_TRACKS_CONTAINER = '[data-testid="tracklist"]'  # Tracks container
 BASE_SPOTIFY_URL = "https://open.spotify.com"
 SPOTIFY_BILLION_CLUB_URL = "https://open.spotify.com/playlist/37i9dQZF1DX7iB3RCnBnN4"
 SPOTIFY_PLAYLIST_IMAGE_SELECTOR = '[data-testid="playlist-image"]'  # Selector for spotify playlist url
-SPOTIFY_PLAYLIST_IMAGE_ARTIST_TEXT = "All the songs with over 1 billion streams on Spotify. Cover:"  # Phrase to find the name of the artist on the playlist cover
+SPOTIFY_PLAYLIST_IMAGE_ARTIST_TEXT = "Celebrating all the songs with more than a billion streams on Spotify. Cover:"  # Phrase to find the name of the artist on the playlist cover
 SPOTIFY_TITLE_SELECTOR = '[data-testid="entityTitle"]'  # Selector for title
 SPOTIFY_ALBUM_TOTAL_TRACKS_XPATH = "//main/section/div[1]/div[2]/div[2]/div[1]/div[2]/span"  # ALBUM -> Xpath from main to total tacks span
 SPOTIFY_TRACK_IMAGE_XPATH = "//main/section/div[1]//img[1]"  # Track page -> Xpath from main to track image

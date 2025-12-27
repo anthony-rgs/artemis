@@ -30,7 +30,7 @@ SAVE_LOG = False  # Enables/disables logging to a file
 # Playwright Configuration
 # =======================
 PLAYWRIGHT_OPTIONS = {
-  "headless": False,  # Run browser in headless mode (no UI)
+  "headless": True,  # Run browser in headless mode (no UI)
   "disable_gpu": True,  # Disable GPU acceleration (fixes issues in headless mode)
   "no_sandbox": True,  # Required for running in some environments (e.g., Linux servers)
   "disable_dev_shm_usage": True,  # To prevent memory issues on Docker/Linux.

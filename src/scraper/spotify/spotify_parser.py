@@ -184,10 +184,10 @@ def spotify_scrap_artist_data(page, artist_link, artist_name):
       selector = f'button[aria-label="{escaped_artist_name}"]'
       artist_img_btn = page.wait_for_selector(selector, timeout=10000)
       artist_bg_img = artist_img_btn.evaluate("el => getComputedStyle(el).backgroundImage")
-      artist_img_url =  re.search(r'url\(["\']?(.*?)["\']?\)', artist_bg_img)
-      if artist_img_url and artist_img_url.group(1):
-        artist_img_url =  artist_img_url.group(1)
-    except TimeoutError:
+      match_artist_img_url = re.search(r'url\(["\']?(.*?)["\']?\)', artist_bg_img)
+      if match_artist_img_url and match_artist_img_url.group(1):
+        artist_img_url = match_artist_img_url.group(1)
+    except Exception:
       pass
 
     # Artist without description section
@@ -198,15 +198,20 @@ def spotify_scrap_artist_data(page, artist_link, artist_name):
         if wait_for_artist_img: 
           artist_imgs = page.query_selector_all(selector)
           artist_img_url = artist_imgs[-1].get_attribute("src")
-      except TimeoutError:
+      except Exception:
         pass
         
     # Get artist monthly listeners
-    artist_listeners_span = page.wait_for_selector('span:has-text("monthly listeners")')
-    artist_listeners_text = artist_listeners_span.inner_text()
-    artist_monthly_listeners_string = artist_listeners_text.replace("monthly listeners", "").strip()
-    artist_monthly_linsteners = int(artist_monthly_listeners_string.replace(",", ""))
-    
+    artist_monthly_linsteners = None
+
+    try:
+      artist_listeners_span = page.wait_for_selector('span:has-text("monthly listeners")', timeout=10000)
+      artist_listeners_text = artist_listeners_span.inner_text()
+      artist_monthly_linsteners = int(artist_listeners_text.replace("monthly listeners", "").strip().replace(",", ""))
+    except Exception:
+      logger.error("❌ Failed to extract monthly listeners\n")
+
+
     # New artist data
     new_artist_data = {
       'artist_img': artist_img_url,
@@ -219,4 +224,7 @@ def spotify_scrap_artist_data(page, artist_link, artist_name):
 
   except Exception:
     logger.error(f"❌ Failed to update Artist track data\n", exc_info=True)
-    return None
+    return {
+      'artist_img': '',
+      'track_listeners': None
+    }

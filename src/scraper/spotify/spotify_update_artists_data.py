@@ -31,8 +31,8 @@ def spotify_update_artists_data(kill_script = True):
       logger.disabled = False  # Enable logger
 
       # Checks 
-      artists_with_image = [artist for artist in json_file if artist.get("artist_img")]
-      artists_without_image = [artist for artist in json_file if not artist.get("artist_img")]
+      artists_with_image = [artist for artist in json_file if artist.get("artist_img") is not None]
+      artists_without_image = [artist for artist in json_file if artist.get("artist_img") is None]
       other_artists = artists_without_image[1:]
       logger.info(f"📊 Artists updated : {len(artists_with_image)}/{len(json_file)}")
 
